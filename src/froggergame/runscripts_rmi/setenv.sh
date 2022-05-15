@@ -26,7 +26,7 @@ export USERNAME=flaviojnsilva
 
 #@REM ==== JAVA NAMING STUFF ====
 export JAVAPROJ_NAME=SD_Project
-export JAVAPROJ=/Users/flaviojnsilva/Desktop/SD_Project
+export JAVAPROJ=/Users/anogueira/Desktop/UFP-Projectos
 
 export PACKAGE=froggergame
 #export PACKAGE_PREFIX=

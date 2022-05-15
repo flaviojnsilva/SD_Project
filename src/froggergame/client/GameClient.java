@@ -1,8 +1,15 @@
 package froggergame.client;
 
+import froggergame.GUI.Login;
+import froggergame.GUI.LoginFrame;
 import froggergame.server.GameFactoryRI;
+import froggergame.server.GameGroupImpl;
 import froggergame.server.GameSessionRI;
+import froggergame.server.User;
 import froggergame.util.rmisetup.SetupContextRMI;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -32,7 +39,7 @@ public class GameClient {
     /**
      * Remote interface that will hold the Servant proxy
      */
-    private GameFactoryRI diglibdRI;
+    private GameFactoryRI gameFactoryRI;
 
     public static void main(String[] args) {
         if (args != null && args.length < 2) {
@@ -73,7 +80,7 @@ public class GameClient {
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR lookup service @ {0}", serviceUrl);
 
                 //============ Get proxy MAIL_TO_ADDR HelloWorld service ============
-                diglibdRI = (GameFactoryRI) registry.lookup(serviceUrl);
+                gameFactoryRI = (GameFactoryRI) registry.lookup(serviceUrl);
             } else {
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "registry not bound (check IPs). :(");
                 //registry = LocateRegistry.createRegistry(1099);
@@ -81,27 +88,59 @@ public class GameClient {
         } catch (RemoteException | NotBoundException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
-        return diglibdRI;
+        return gameFactoryRI;
     }
 
     private void playService() {
         try {
-            //============ Call HelloWorld remote service ============
-            GameSessionRI sessionRI = this.diglibdRI.login("guest", "ufp");
-            /*Book[] books = SessionRI.search("Distributed Systems: principles and paradigms", "Tanenbaum");
-            for (Book book : books) {
-                System.out.println(book);
-            }*/
-            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR finish, bye. ;)");
 
+            LoginFrame frame = new LoginFrame();
+            frame.setTitle("Frogger Game");
+            frame.setVisible(true);
+            frame.setBounds(10, 10, 370, 600);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setResizable(false);
 
+            boolean b = this.gameFactoryRI.register("ufp@ufp.pt", "123");
+            checkRegister(b);
+            boolean c = this.gameFactoryRI.register("VSVufp@ufp.pt", "1234");
+            checkRegister(c);
 
+            GameSessionRI gameSessionRI = this.gameFactoryRI.login("ufp@ufp.pt", "123");
+            gameSessionRI.createGameGroup(1, "teste");
 
+            //criação de players
+            PlayerImpl player1 = new PlayerImpl(1, "ufp@ufp.pt");
+            PlayerImpl player2 = new PlayerImpl(2, "VSVufp@ufp.pt");
 
+            //criação do gamegroup
+            GameGroupImpl gameGroup = new GameGroupImpl(1);
+
+            //inserção de players no game group
+            gameGroup.addPlayer(player1);
+            gameGroup.addPlayer(player2);
+
+            //Print do gamegroup
+            System.out.println(gameGroup.getPlayers());
 
 
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    private void checkRegister(boolean b) {
+        if (b) {
+            //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User Registered");
+            System.out.println("UTILIZADOR REGISTADO.\n");
+        } else {
+            //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User not Registered");
+            System.out.println("UTILIZADOR NÃO REGISTADO.\n");
+        }
+    }
+
+    private void print(String s) {
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, s);
+    }
+
 }

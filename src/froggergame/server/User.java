@@ -5,36 +5,29 @@
 package froggergame.server;
 
 /**
- *
  * @author rmoreira
  */
 public class User {
 
-    private String uname;
+    private String email;
     private String pword;
 
-    public User(String uname, String pword) {
-        this.uname = uname;
+    public User(String email, String pword) {
+        this.email = email;
         this.pword = pword;
     }
 
     @Override
     public String toString() {
-        return "User{" + "uname=" + uname + ", pword=" + pword + '}';
+        return "User{" + "uemail" + email + ", pword=" + pword + '}';
     }
 
-    /**
-     * @return the uname
-     */
-    public String getUname() {
-        return uname;
+    public String getEmail() {
+        return email;
     }
 
-    /**
-     * @param uname the uname to set
-     */
-    public void setUname(String uname) {
-        this.uname = uname;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     /**

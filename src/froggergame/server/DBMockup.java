@@ -6,7 +6,6 @@ import java.util.ArrayList;
  * This class simulates a DBMockup for managing users and books.
  *
  * @author rmoreira
- *
  */
 public class DBMockup {
 
@@ -23,12 +22,12 @@ public class DBMockup {
     /**
      * Registers a new user.
      *
-     * @param u username
+     * @param e email
      * @param p passwd
      */
-    public boolean register(String u, String p) {
-        if (getUser(u) == null) {
-            users.add(new User(u, p));
+    public boolean register(String e, String p) {
+        if (getUser(e) == null) {
+            users.add(new User(e, p));
             return true;
         }
         return false;
@@ -37,13 +36,13 @@ public class DBMockup {
     /**
      * Checks the credentials of an user.
      *
-     * @param u username
+     * @param e email
      * @param p passwd
      * @return
      */
-    public boolean exists(String u, String p) {
+    public boolean exists(String e, String p) {
         for (User usr : this.users) {
-            if (usr.getUname().compareTo(u) == 0 && usr.getPword().compareTo(p) == 0) {
+            if (usr.getEmail().compareTo(e) == 0 && usr.getPword().compareTo(p) == 0) {
                 return true;
             }
         }
@@ -52,27 +51,11 @@ public class DBMockup {
     }
 
     public User getUser(String username) {
-        for(User u : this.users) {
-            if(u.getUname().compareTo(username) == 0) {
+        for (User u : this.users) {
+            if (u.getEmail().compareTo(username) == 0) {
                 return u;
             }
         }
         return null;
     }
-
-    /**
-     * Inserts a new book into the DigLib.
-     *
-     * @param t title
-     * @param a authors
-     */
-
-    /**
-     * Looks up for books with given title and author keywords.
-     *
-     * @param t title keyword
-     * @param a author keyword
-     * @return
-     */
-
 }

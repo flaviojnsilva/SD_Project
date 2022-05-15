@@ -28,30 +28,27 @@ public class GameFactoryImpl extends UnicastRemoteObject implements GameFactoryR
     }
 
     @Override
-    public void print(String msg) throws RemoteException {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, "someone called me with msg = {0}", new Object[]{msg});
-    }
-
-    @Override
-    public GameSessionRI login(String u, String p) throws RemoteException {
-        if (this.dbMockup.exists(u, p)) {
-            if (match_userSession.containsKey(u)) {
-                return match_userSession.get(u);
+    public GameSessionRI login(String email, String password) throws RemoteException {
+        if (this.dbMockup.exists(email, password)) {
+            if (match_userSession.containsKey(email)) {
+                return match_userSession.get(email);
             } else {
-                GameSessionImpl diglibSession = new GameSessionImpl(this, u);
-                match_userSession.put(u, diglibSession);
-                return diglibSession;
+                GameSessionImpl gameSession = new GameSessionImpl(this, email);
+                match_userSession.put(email, gameSession);
+                return gameSession;
             }
         } else {
+            System.out.println("TESTE USER ERRADOS");
             return null;
         }
     }
 
     @Override
-    public void register(String u, String p) throws RemoteException {
-        this.dbMockup.register(u, p);
+    public boolean register(String email, String password) throws RemoteException {
+        return this.dbMockup.register(email, password);
     }
 
+    @Override
     public void destroySession(String u) throws RemoteException {
         this.match_userSession.remove(u);
     }

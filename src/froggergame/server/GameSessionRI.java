@@ -14,6 +14,11 @@ import java.rmi.RemoteException;
  */
 
 public interface GameSessionRI extends Remote {
+
+    boolean createGameGroup(int id, String filename) throws RemoteException;
+
+    String listGameGroup() throws RemoteException;
+
     public void logout() throws RemoteException;
 
     //TODO() acrescentar jogo e juntar-se ao jogo + método jogos ativos no momento a juntar ao jogo
