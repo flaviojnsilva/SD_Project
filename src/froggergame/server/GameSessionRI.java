@@ -21,4 +21,6 @@ public interface GameSessionRI extends Remote {
     //TODO() com classe State para ter o estado atual do jogo: notifiyAll, attach e dettach + getState e setState (servidor) ->> checkar aul do observer
     //TODO() lado do cliente método updateState()
 
+    //TODO() commit
+
 }
