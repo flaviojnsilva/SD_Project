@@ -107,7 +107,13 @@ public class GameClient {
             checkRegister(c);
 
             GameSessionRI gameSessionRI = this.gameFactoryRI.login("ufp@ufp.pt", "123");
-            gameSessionRI.createGameGroup(1, "teste");
+            GameSessionRI gameSessionRI1 = this.gameFactoryRI.login("VSVufp@ufp.pt", "1234");
+
+            gameSessionRI.createGameGroup(1,"teste");
+
+            //** AQUI DÁ SG FAULT.
+            //print(gameSessionRI.listGameGroup());
+
 
             //criação de players
             PlayerImpl player1 = new PlayerImpl(1, "ufp@ufp.pt");

@@ -19,14 +19,25 @@ public class GameSessionImpl implements GameSessionRI {
     }
 
     @Override
-    public boolean createGameGroup(int id, String filename) throws RemoteException {
-        return false;
+    public boolean createGameGroup(int id, String name) throws RemoteException {
 
+        GameGroupImpl gameGroup = new GameGroupImpl(id);
+        if (this.email == null) {
+            this.gamegroups.add(gameGroup);
+            //GameServer.addGameGroup(gameGroup);
+            return true; //JobGroup criado com sucesso
+        }
+        return false;
     }
 
     @Override
     public String listGameGroup() throws RemoteException {
-        return this.gamegroups.toString();
+        if (this.gamegroups.toString() != null) {
+
+            return this.gamegroups.get(0).toString();
+        } else {
+            return this.email;
+        }
     }
 
     @Override
