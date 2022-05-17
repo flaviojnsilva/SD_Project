@@ -1,6 +1,6 @@
 package froggergame.client;
 
-import froggergame.server.GameGroupRI;
+import froggergame.server.FroggerGameRI;
 
 import java.rmi.RemoteException;
 
@@ -8,22 +8,10 @@ public class PlayerImpl implements PlayerRI {
 
     private int id;
 
-    private String email;
-    private GameGroupRI gameGroupRI;
+    private FroggerGameRI gameGroupRI;
 
-    public PlayerImpl(int id, String email) {
+    public PlayerImpl(int id) {
         this.id = id;
-        this.email = email;
-    }
-
-    @Override
-    public void setGameGroup(GameGroupRI gameGroup) {
-        this.gameGroupRI = gameGroup;
-    }
-
-    @Override
-    public GameGroupRI getGameGroup() throws RemoteException {
-        return null;
     }
 
     @Override
@@ -32,9 +20,19 @@ public class PlayerImpl implements PlayerRI {
     }
 
     @Override
+    public FroggerGameRI getFroggerGameRI() throws RemoteException {
+        return null;
+    }
+
+    @Override
+    public void setFroggerGameRI(FroggerGameRI gameGroup) throws RemoteException {
+
+    }
+
+    @Override
     public String toString() {
         return "Player{" +
-                "ID: " + id + " EMAIl: " + email +
+                "ID: " + id + " EMAIl: " +
                 '}' + "\n";
     }
 }

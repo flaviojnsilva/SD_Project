@@ -5,7 +5,7 @@ import froggergame.client.PlayerRI;
 import java.rmi.Remote;
 import java.util.ArrayList;
 
-public interface GameGroupRI extends Remote {
+public interface FroggerGameRI extends Remote {
     void addPlayer(PlayerRI player);
     void removePlayer(PlayerRI player);
     int getId();

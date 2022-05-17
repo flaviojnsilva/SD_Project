@@ -1,13 +1,13 @@
 package froggergame.client;
 
-import froggergame.server.GameGroupRI;
+import froggergame.server.FroggerGameRI;
 
 import java.rmi.RemoteException;
 
 public interface PlayerRI {
     int getId();
 
-    GameGroupRI getGameGroup() throws RemoteException;
+    FroggerGameRI getFroggerGameRI() throws RemoteException;
 
-    void setGameGroup(GameGroupRI gameGroup) throws RemoteException;
+    void setFroggerGameRI(FroggerGameRI gameGroup) throws RemoteException;
 }

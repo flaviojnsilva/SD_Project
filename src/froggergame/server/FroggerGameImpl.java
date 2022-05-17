@@ -4,13 +4,9 @@ import froggergame.client.PlayerRI;
 
 import java.util.ArrayList;
 
-public class GameGroupImpl implements GameGroupRI {
+public class FroggerGameImpl implements FroggerGameRI {
     private int id;
     private ArrayList<PlayerRI> players = new ArrayList<>();
-
-    public GameGroupImpl(int id) {
-        this.id = id;
-    }
 
     /**
      * Adiciona um worker ao jobgroup
@@ -47,6 +43,10 @@ public class GameGroupImpl implements GameGroupRI {
 
     public ArrayList<PlayerRI> getPlayers() {
         return players;
+    }
+
+    public void setPlayers(ArrayList<PlayerRI> players) {
+        this.players = players;
     }
 
     /**

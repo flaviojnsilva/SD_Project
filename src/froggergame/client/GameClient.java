@@ -1,12 +1,11 @@
 package froggergame.client;
 
-import froggergame.GUI.LoginFrame;
+import froggergame.frogger.Main;
+import froggergame.server.Game;
 import froggergame.server.GameFactoryRI;
-import froggergame.server.GameGroupImpl;
 import froggergame.server.GameSessionRI;
 import froggergame.util.rmisetup.SetupContextRMI;
 
-import javax.swing.*;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -92,14 +91,14 @@ public class GameClient {
     private void playService() {
         try {
 
-            LoginFrame UI = new LoginFrame();
-            UI.setTitle("Frogger Game");
-            UI.setVisible(true);
-            UI.setBounds(10, 10, 370, 600);
-            UI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            UI.setResizable(false);
+            //LoginFrame UI = new LoginFrame();
+            //UI.setTitle("Frogger Game");
+            //UI.setVisible(true);
+            //UI.setBounds(10, 10, 370, 600);
+            //UI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            //UI.setResizable(false);
 
-            UI.addComponentsToContainer();
+            //UI.addComponentsToContainer();
 
             //boolean b = this.gameFactoryRI.register("ufp@ufp.pt", "123");
             //checkRegister(b);
@@ -119,30 +118,18 @@ public class GameClient {
             System.out.println("Introduza a password:");
             String passWord = password.nextLine();  // Read user input
 
-            //boolean r = this.gameFactoryRI.register(userName, passWord);
+
+            boolean r = this.gameFactoryRI.register(userName, passWord);
             //checkRegister(r);
 
             GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName, passWord);
 
-            //gameSessionRI.createGameGroup(1, "teste");
+            Game a = criarjogo(gameSessionRI);
 
-            //** AQUI DÁ SG FAULT.
-            //print(gameSessionRI.listGameGroup());
+            PlayerRI observerRI = new PlayerImpl(1);
 
-            //criação de players
-           // PlayerImpl player1 = new PlayerImpl(1, "ufp@ufp.pt");
-           // PlayerImpl player2 = new PlayerImpl(2, "VSVufp@ufp.pt");
-
-            //criação do gamegroup
-            GameGroupImpl gameGroup = new GameGroupImpl(1);
-
-            //inserção de players no game group
-            //gameGroup.addPlayer(player1);
-            //gameGroup.addPlayer(player2);
-
-            //Print do gamegroup
-            System.out.println(gameGroup.getPlayers());
-
+            Main f = new Main(a, observerRI);
+            f.run();
 
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -157,6 +144,28 @@ public class GameClient {
             //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User not Registered");
             System.out.println("UTILIZADOR NÃO REGISTADO.\n");
         }
+    }
+
+    private static Game criarjogo(GameSessionRI gameSessionRI) throws RemoteException {
+        Scanner difficulty = new Scanner(System.in);
+        System.out.println("Introduza a dificuldade:");
+        int dif = difficulty.nextInt();
+        System.out.println("Introduza o numero maximo de jogadores:");
+        int max = difficulty.nextInt();
+
+        //chama o Create Game
+        PlayerRI observerRI = new PlayerImpl(1);
+
+        Game game = gameSessionRI.createGame(1, dif, max, observerRI);
+
+        observerRI.setFroggerGameRI(game.getFroggerGameRI());
+
+        //while (observerRI.getFroggerGameRI().getFroggers().size() != game.getMaxPlayers()) {
+        //}
+
+        System.out.println("Jogo criado com sucesso!");
+
+        return game;
     }
 
     private void print(String s) {

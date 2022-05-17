@@ -1,5 +1,7 @@
 package froggergame.server;
 
+import froggergame.client.PlayerRI;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -15,9 +17,9 @@ import java.rmi.RemoteException;
 
 public interface GameSessionRI extends Remote {
 
-    boolean createGameGroup(int id, String filename) throws RemoteException;
+    public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI) throws RemoteException;
 
-    String listGameGroup() throws RemoteException;
+    String listGame() throws RemoteException;
 
     public void logout() throws RemoteException;
 

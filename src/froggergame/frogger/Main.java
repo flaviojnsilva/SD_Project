@@ -26,6 +26,13 @@
 package froggergame.frogger;
 
 import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
+
+import froggergame.client.PlayerImpl;
+import froggergame.client.PlayerRI;
+import froggergame.server.FroggerGameImpl;
+import froggergame.server.FroggerGameRI;
+import froggergame.server.Game;
 import jig.engine.ImageResource;
 import jig.engine.PaintableCanvas;
 import jig.engine.RenderingContext;
@@ -94,7 +101,7 @@ public class Main extends StaticScreenGame {
     /**
 	 * Initialize game objects
 	 */
-	public Main () {
+	public Main (Game game, PlayerRI playerRI) {
 		
 		super(WORLD_WIDTH, WORLD_HEIGHT, false);
 		
@@ -124,7 +131,7 @@ public class Main extends StaticScreenGame {
 		movingObjectsLayer = new AbstractBodyLayer.IterativeUpdate<MovingEntity>();
 		particleLayer = new AbstractBodyLayer.IterativeUpdate<MovingEntity>();
 		
-		initializeLevel(1);
+		initializeLevel(game.getDifficulty());
 	}
 	
 	
@@ -421,7 +428,15 @@ public class Main extends StaticScreenGame {
 	}
 	
 	public static void main (String[] args) {
-		Main f = new Main();
+
+		FroggerGameRI froggerGameRI = new FroggerGameImpl();
+
+
+		Game game = new Game(2,2,froggerGameRI);
+
+		PlayerRI playerRI=new PlayerImpl(1);
+
+		Main f = new Main(game, playerRI);
 		f.run();
 	}
 }

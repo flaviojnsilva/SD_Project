@@ -9,10 +9,12 @@ import java.util.ArrayList;
  */
 public class DBMockup {
 
-    private final ArrayList<User> users;// = new ArrayList();
+    private final ArrayList<User> users;
+    private final ArrayList<Game> games;
 
     public DBMockup() {
         this.users = new ArrayList<>();
+        this.games = new ArrayList<>();
     }
 
     /**
@@ -31,6 +33,15 @@ public class DBMockup {
             return true;
         }
         return false;
+    }
+
+    public Game insert(int dif, int maxPlayers, FroggerGameRI froggerGameRI) {
+
+        Game a = new Game(maxPlayers, dif, froggerGameRI);
+
+        games.add(a);
+
+        return a;
     }
 
     /**
