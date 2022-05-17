@@ -17,7 +17,7 @@ public class GameSessionImpl implements GameSessionRI {
         this.email = email;
         UnicastRemoteObject.exportObject(this, 0);
     }
-
+//create game
     @Override
     public boolean createGameGroup(int id, String name) throws RemoteException {
 

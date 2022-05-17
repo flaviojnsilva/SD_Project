@@ -1,19 +1,17 @@
 package froggergame.client;
 
-import froggergame.GUI.Login;
 import froggergame.GUI.LoginFrame;
 import froggergame.server.GameFactoryRI;
 import froggergame.server.GameGroupImpl;
 import froggergame.server.GameSessionRI;
-import froggergame.server.User;
 import froggergame.util.rmisetup.SetupContextRMI;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -94,37 +92,53 @@ public class GameClient {
     private void playService() {
         try {
 
-            LoginFrame frame = new LoginFrame();
-            frame.setTitle("Frogger Game");
-            frame.setVisible(true);
-            frame.setBounds(10, 10, 370, 600);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setResizable(false);
+            LoginFrame UI = new LoginFrame();
+            UI.setTitle("Frogger Game");
+            UI.setVisible(true);
+            UI.setBounds(10, 10, 370, 600);
+            UI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            UI.setResizable(false);
 
-            boolean b = this.gameFactoryRI.register("ufp@ufp.pt", "123");
-            checkRegister(b);
-            boolean c = this.gameFactoryRI.register("VSVufp@ufp.pt", "1234");
-            checkRegister(c);
+            UI.addComponentsToContainer();
 
-            GameSessionRI gameSessionRI = this.gameFactoryRI.login("ufp@ufp.pt", "123");
-            GameSessionRI gameSessionRI1 = this.gameFactoryRI.login("VSVufp@ufp.pt", "1234");
+            //boolean b = this.gameFactoryRI.register("ufp@ufp.pt", "123");
+            //checkRegister(b);
+            //boolean c = this.gameFactoryRI.register("VSVufp@ufp.pt", "1234");
+            //checkRegister(c);
 
-            gameSessionRI.createGameGroup(1,"teste");
+            //GameSessionRI gameSessionRI = this.gameFactoryRI.login("ufp@ufp.pt", "123");
+
+//atraves do session criar jogo, visualizar jogos e permitir juntar....
+//depois disto lançar jogo.
+//verificar nº jogadores,  é minimo, permite mais...
+
+            Scanner username = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("Introduza o nome:");
+            String userName = username.nextLine();  // Read user input
+            Scanner password = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("Introduza a password:");
+            String passWord = password.nextLine();  // Read user input
+
+            //boolean r = this.gameFactoryRI.register(userName, passWord);
+            //checkRegister(r);
+
+            GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName, passWord);
+
+            //gameSessionRI.createGameGroup(1, "teste");
 
             //** AQUI DÁ SG FAULT.
             //print(gameSessionRI.listGameGroup());
 
-
             //criação de players
-            PlayerImpl player1 = new PlayerImpl(1, "ufp@ufp.pt");
-            PlayerImpl player2 = new PlayerImpl(2, "VSVufp@ufp.pt");
+           // PlayerImpl player1 = new PlayerImpl(1, "ufp@ufp.pt");
+           // PlayerImpl player2 = new PlayerImpl(2, "VSVufp@ufp.pt");
 
             //criação do gamegroup
             GameGroupImpl gameGroup = new GameGroupImpl(1);
 
             //inserção de players no game group
-            gameGroup.addPlayer(player1);
-            gameGroup.addPlayer(player2);
+            //gameGroup.addPlayer(player1);
+            //gameGroup.addPlayer(player2);
 
             //Print do gamegroup
             System.out.println(gameGroup.getPlayers());

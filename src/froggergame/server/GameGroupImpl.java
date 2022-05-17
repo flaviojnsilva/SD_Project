@@ -17,6 +17,7 @@ public class GameGroupImpl implements GameGroupRI {
      *
      * @param player worker a adicionar
      */
+    //attach
     @Override
     public void addPlayer(PlayerRI player) {
         if (!this.players.contains(player)) {
