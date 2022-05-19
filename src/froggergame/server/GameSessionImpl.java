@@ -26,9 +26,7 @@ public class GameSessionImpl implements GameSessionRI {
 
         FroggerGameRI froggerGameRI = new FroggerGameImpl();
 
-        Game game = gameFactoryImpl.getDbMockup().insert(diff, maxPlayers, froggerGameRI);
-
-        return game;
+        return gameFactoryImpl.getDbMockup().insert(diff, maxPlayers, froggerGameRI);
     }
 
     @Override

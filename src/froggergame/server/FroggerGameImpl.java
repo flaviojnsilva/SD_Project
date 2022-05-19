@@ -2,6 +2,7 @@ package froggergame.server;
 
 import froggergame.client.PlayerRI;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class FroggerGameImpl implements FroggerGameRI {
@@ -55,7 +56,7 @@ public class FroggerGameImpl implements FroggerGameRI {
      * @param playerID id worker
      * @return retorna o worker ou null se nao encontrar
      */
-    public PlayerRI getPlayer(int playerID) {
+    public PlayerRI getPlayer(int playerID) throws RemoteException {
         for (PlayerRI p : this.players) {
             if (p.getId() == playerID) {
                 return p;

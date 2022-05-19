@@ -48,7 +48,7 @@ public class Main extends StaticScreenGame {
 	static final int WORLD_HEIGHT = (14*32);
 	static final Vector2D FROGGER_START = new Vector2D(6*32,WORLD_HEIGHT-32);
 	
-	static final String RSC_PATH = "resources/";
+	static final String RSC_PATH = "froggergame/resources/";
 	static final String SPRITE_SHEET = RSC_PATH + "frogger_sprites.png";
 	
     static final int FROGGER_LIVES      = 5;
@@ -107,7 +107,7 @@ public class Main extends StaticScreenGame {
 		
 		gameframe.setTitle("Frogger");
 		
-		ResourceFactory.getFactory().loadResources(RSC_PATH, "froggergame.resources.xml");
+		ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
 
 		ImageResource bkg = ResourceFactory.getFactory().getFrames(
 				SPRITE_SHEET + "#background").get(0);
@@ -427,16 +427,15 @@ public class Main extends StaticScreenGame {
 		}
 	}
 	
-	public static void main (String[] args) {
+	public static void main (String[] args) throws RemoteException {
 
-		FroggerGameRI froggerGameRI = new FroggerGameImpl();
-
+		/*FroggerGameRI froggerGameRI = new FroggerGameImpl();
 
 		Game game = new Game(2,2,froggerGameRI);
 
 		PlayerRI playerRI=new PlayerImpl(1);
 
 		Main f = new Main(game, playerRI);
-		f.run();
+		f.run();*/
 	}
 }

@@ -6,6 +6,7 @@ import froggergame.server.GameFactoryRI;
 import froggergame.server.GameSessionRI;
 import froggergame.util.rmisetup.SetupContextRMI;
 
+import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -27,7 +28,7 @@ import java.util.logging.Logger;
  * @author Rui S. Moreira
  * @version 3.0
  */
-public class GameClient {
+public class GameClient implements Serializable {
 
     /**
      * Context for connecting a RMI froggergame.client MAIL_TO_ADDR a RMI Servant
@@ -100,11 +101,6 @@ public class GameClient {
 
             //UI.addComponentsToContainer();
 
-            //boolean b = this.gameFactoryRI.register("ufp@ufp.pt", "123");
-            //checkRegister(b);
-            //boolean c = this.gameFactoryRI.register("VSVufp@ufp.pt", "1234");
-            //checkRegister(c);
-
             //GameSessionRI gameSessionRI = this.gameFactoryRI.login("ufp@ufp.pt", "123");
 
 //atraves do session criar jogo, visualizar jogos e permitir juntar....
@@ -124,12 +120,8 @@ public class GameClient {
 
             GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName, passWord);
 
-            Game a = criarjogo(gameSessionRI);
-
             PlayerRI observerRI = new PlayerImpl(1);
-
-            Main f = new Main(a, observerRI);
-            f.run();
+            Game game = criarjogo(gameSessionRI);
 
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -156,13 +148,15 @@ public class GameClient {
         //chama o Create Game
         PlayerRI observerRI = new PlayerImpl(1);
 
-        Game game = gameSessionRI.createGame(1, dif, max, observerRI);
+        Game game = gameSessionRI.createGame(1, 1, 2, observerRI);
 
         observerRI.setFroggerGameRI(game.getFroggerGameRI());
 
         //while (observerRI.getFroggerGameRI().getFroggers().size() != game.getMaxPlayers()) {
         //}
 
+        Main f = new Main(game, observerRI);
+        f.run();
         System.out.println("Jogo criado com sucesso!");
 
         return game;

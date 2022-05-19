@@ -97,7 +97,8 @@ export JAVAPROJ_DIST_LIB_FOLDER=${JAVAPROJ}/${JAVAPROJ_DIST_LIB}
 export JAVAPROJ_JAR_FILE=${JAVAPROJ_NAME}.jar
 export MYSQL_CON_JAR=mysql-connector-java-5.1.38-bin.jar
 
-export CLASSPATH=.:${JAVAPROJ_CLASSES_FOLDER}
+export CLASSPATH=.:${JAVAPROJ_CLASSES_FOLDER}:/Users/anogueira/Desktop/UFP-Projectos/lib/ogg-spi/jogg-0.0.7.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/ogg-spi/jorbis-0.0.15.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/ogg-spi/tritonus_jorbis-0.3.6.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/spi/tritonus_share.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/jig-1.7.5.jar
+
 #export CLASSPATH=.:${JAVAPROJ_DIST_FOLDER}/${JAVAPROJ_JAR_FILE}:${JAVAPROJ_DIST_LIB_FOLDER}/${MYSQL_CON_JAR}
 
 export ABSPATH2CLASSES=${JAVAPROJ}/${JAVAPROJ_CLASSES}
