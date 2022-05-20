@@ -92,36 +92,11 @@ public class GameClient implements Serializable {
     private void playService() {
         try {
 
-            //LoginFrame UI = new LoginFrame();
-            //UI.setTitle("Frogger Game");
-            //UI.setVisible(true);
-            //UI.setBounds(10, 10, 370, 600);
-            //UI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            //UI.setResizable(false);
-
-            //UI.addComponentsToContainer();
-
-            //GameSessionRI gameSessionRI = this.gameFactoryRI.login("ufp@ufp.pt", "123");
-
 //atraves do session criar jogo, visualizar jogos e permitir juntar....
 //depois disto lançar jogo.
 //verificar nº jogadores,  é minimo, permite mais...
 
-            Scanner username = new Scanner(System.in);  // Create a Scanner object
-            System.out.println("Introduza o nome:");
-            String userName = username.nextLine();  // Read user input
-            Scanner password = new Scanner(System.in);  // Create a Scanner object
-            System.out.println("Introduza a password:");
-            String passWord = password.nextLine();  // Read user input
-
-
-            boolean r = this.gameFactoryRI.register(userName, passWord);
-            //checkRegister(r);
-
-            GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName, passWord);
-
-            PlayerRI observerRI = new PlayerImpl(1);
-            Game game = criarjogo(gameSessionRI);
+           menu();
 
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -148,7 +123,7 @@ public class GameClient implements Serializable {
         //chama o Create Game
         PlayerRI observerRI = new PlayerImpl(1);
 
-        Game game = gameSessionRI.createGame(1, 1, 2, observerRI);
+        Game game = gameSessionRI.createGame(1, dif, max, observerRI);
 
         observerRI.setFroggerGameRI(game.getFroggerGameRI());
 
@@ -166,4 +141,89 @@ public class GameClient implements Serializable {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, s);
     }
 
+    private void menu() throws RemoteException {
+        Scanner menu = new Scanner(System.in);
+
+        System.out.print("##--Frogger Game--##\n\n");
+        System.out.print("|---------------------------|\n");
+        System.out.print("| Opção 1 - Registrar-me    |\n");
+        System.out.print("| Opção 2 - Novo Jogo       |\n");
+        System.out.print("| Opção 3 - Juntar-me a jogo|\n");
+        System.out.print("| Opção 4 - Sair            |\n");
+        System.out.print("|---------------------------|\n");
+        System.out.print("Digite uma opção: ");
+
+        int option = menu.nextInt();
+
+        switch (option) {
+
+            case 1:
+                System.out.print("\nRegisto\n");
+                Scanner email = new Scanner(System.in);  // Create a Scanner object
+                System.out.println("Introduza o nome:");
+                String eMail = email.nextLine();  // Read user input
+                Scanner password = new Scanner(System.in);  // Create a Scanner object
+                System.out.println("Introduza a password:");
+                String passWord = password.nextLine();  // Read user input
+
+                boolean r = this.gameFactoryRI.register(eMail, passWord);
+
+                menu();
+
+                break;
+
+            case 2:
+
+                System.out.print("\nNovo Jogo");
+                System.out.print("\nFaça Login\n");
+                Scanner username2 = new Scanner(System.in);  // Create a Scanner object
+                System.out.println("Introduza o nome:");
+                String userName2 = username2.nextLine();  // Read user input
+                Scanner password2 = new Scanner(System.in);  // Create a Scanner object
+                System.out.println("Introduza a password:");
+                String passWord2 = password2.nextLine();  // Read user input
+                GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName2, passWord2);
+
+                if(gameSessionRI==null){
+                    System.out.println("nao está registado\nEfetue primeiro o registo");
+                    menu();
+                }else{
+                PlayerRI observerRI = new PlayerImpl(1);
+                Game game = criarjogo(gameSessionRI);}
+
+                break;
+            case 3:
+                System.out.print("\nJuntar-me a Jogo\n");
+                System.out.print("\nFaça Login\n");
+                Scanner username3 = new Scanner(System.in);  // Create a Scanner object
+                System.out.println("Introduza o nome:");
+                String userName3 = username3.nextLine();  // Read user input
+                Scanner password3 = new Scanner(System.in);  // Create a Scanner object
+                System.out.println("Introduza a password:");
+                String passWord3 = password3.nextLine();  // Read user input
+                GameSessionRI gameSessionRI2 = this.gameFactoryRI.login(userName3, passWord3);
+
+                if(gameSessionRI2==null){
+                    System.out.println("nao está registado\nEfetue primeiro o registo");
+                    menu();
+                }else{
+
+                if(gameSessionRI2.listGame()==null){
+
+                    System.out.println("Nao ha jogos disponiveis ainda\ncrie um novo jogo\n");
+                    menu();
+                }else {
+                    gameSessionRI2.listGame();
+                }
+                }break;
+
+            default:
+                System.out.print("\nOpção Inválida!");
+                break;
+
+            case 4:
+                System.out.print("\nAté Breve.");
+                menu.close();
+        }
+    }
 }

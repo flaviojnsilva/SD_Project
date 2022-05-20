@@ -35,7 +35,7 @@ public class GameSessionImpl implements GameSessionRI {
 
             return this.gamegroups.get(0).toString();
         } else {
-            return this.email;
+            return null;
         }
     }
 
