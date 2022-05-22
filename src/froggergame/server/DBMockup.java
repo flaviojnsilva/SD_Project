@@ -35,9 +35,9 @@ public class DBMockup {
         return false;
     }
 
-    public Game insert(int dif, int maxPlayers, FroggerGameRI froggerGameRI) {
+    public Game insert(int id, int dif, int maxPlayers, FroggerGameRI froggerGameRI) {
 
-        Game a = new Game(maxPlayers, dif, froggerGameRI);
+        Game a = new Game(id, maxPlayers, dif, froggerGameRI);
 
         games.add(a);
 
@@ -60,6 +60,17 @@ public class DBMockup {
         return false;
         //return ((u.equalsIgnoreCase("guest") && p.equalsIgnoreCase("ufp")) ? true : false);
     }
+
+    public Game select(int id) {
+
+        for (Game game : games) {
+            if (game.id == id) {
+                return game;
+            }
+        }
+        return null;
+    }
+
 
     public User getUser(String username) {
         for (User u : this.users) {

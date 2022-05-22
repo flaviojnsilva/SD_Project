@@ -17,7 +17,8 @@ public class Game implements Serializable {
 
     GameFactoryImpl gameFactoryImpl;
 
-    public Game(int maxPlayers, int difficulty, FroggerGameRI froggerGameRI) {
+    public Game(int id, int maxPlayers, int difficulty, FroggerGameRI froggerGameRI) {
+        this.id = id;
         this.maxPlayers = maxPlayers;
         this.difficulty = difficulty;
         this.froggerGameRI = froggerGameRI;
@@ -48,6 +49,6 @@ public class Game implements Serializable {
     }
 
     public FroggerGameRI getFroggerGameRI() {
-        return froggerGameRI;
+        return this.froggerGameRI;
     }
 }

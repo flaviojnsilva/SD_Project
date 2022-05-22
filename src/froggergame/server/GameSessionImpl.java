@@ -26,14 +26,34 @@ public class GameSessionImpl implements GameSessionRI {
 
         FroggerGameRI froggerGameRI = new FroggerGameImpl();
 
-        return gameFactoryImpl.getDbMockup().insert(diff, maxPlayers, froggerGameRI);
+        Game game = gameFactoryImpl.getDbMockup().insert(id, diff, maxPlayers, froggerGameRI);
+        game.getFroggerGameRI().addPlayer(playerRI);
+
+        return game;
+    }
+
+    public Game chooseGame(int jogo, PlayerRI playerRI) throws RemoteException {
+
+        Game game = gameFactoryImpl.getDbMockup().select(jogo);
+
+        this.join(jogo, playerRI);
+        return game;
+    }
+
+
+    public Game join(int id, PlayerRI playerRI) throws RemoteException {
+
+        Game game = gameFactoryImpl.getDbMockup().select(id);
+        game.getFroggerGameRI().addPlayer(playerRI);
+
+        return game;
     }
 
     @Override
     public String listGame() throws RemoteException {
-        if (this.gamegroups.toString() != null) {
+        if (this.gamegroups != null) {
 
-            return this.gamegroups.get(0).toString();
+            return this.gameFactoryImpl.getDbMockup().toString();
         } else {
             return null;
         }
@@ -44,3 +64,4 @@ public class GameSessionImpl implements GameSessionRI {
         this.gameFactoryImpl.destroySession(this.email);
     }
 }
+

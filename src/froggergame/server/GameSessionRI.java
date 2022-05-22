@@ -19,9 +19,11 @@ public interface GameSessionRI extends Remote {
 
     public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI) throws RemoteException;
 
-    String listGame() throws RemoteException;
+    public String listGame() throws RemoteException;
 
     public void logout() throws RemoteException;
+
+    Game chooseGame(int jogo, PlayerRI playerRI) throws RemoteException;
 
     //TODO() acrescentar jogo e juntar-se ao jogo + método jogos ativos no momento a juntar ao jogo
 
