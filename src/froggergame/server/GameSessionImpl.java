@@ -56,6 +56,7 @@ public class GameSessionImpl implements GameSessionRI {
         //Imprimir arraylist de jogos
         for (FroggerGameRI item : this.gamegroups) {
             System.out.print(item);
+
         }
         return null;
     }
