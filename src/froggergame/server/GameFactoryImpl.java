@@ -3,8 +3,6 @@ package froggergame.server;
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * <p>Title: Projecto SD</p>

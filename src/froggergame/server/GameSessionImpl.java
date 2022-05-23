@@ -51,12 +51,13 @@ public class GameSessionImpl implements GameSessionRI {
 
     @Override
     public String listGame() throws RemoteException {
-        if (this.gamegroups != null) {
 
-            return this.gameFactoryImpl.getDbMockup().toString();
-        } else {
-            return null;
+        //fazer logs e confirmar se gamegroups realmente null
+        //Imprimir arraylist de jogos
+        for (FroggerGameRI item : this.gamegroups) {
+            System.out.print(item);
         }
+        return null;
     }
 
     @Override

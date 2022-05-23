@@ -429,13 +429,6 @@ public class Main extends StaticScreenGame {
 	
 	public static void main (String[] args) throws RemoteException {
 
-		/*FroggerGameRI froggerGameRI = new FroggerGameImpl();
 
-		Game game = new Game(2,2,froggerGameRI);
-
-		PlayerRI playerRI=new PlayerImpl(1);
-
-		Main f = new Main(game, playerRI);
-		f.run();*/
 	}
 }
