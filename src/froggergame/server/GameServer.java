@@ -82,10 +82,6 @@ public class GameServer {
                 //============ Create Servant ============
                 sessionFactoryRI = new GameFactoryImpl();
 
-                //log teste
-                Logger.getLogger(this.sessionFactoryRI.toString());
-
-
                 //Get service url (including servicename)
                 String serviceUrl = contextRMI.getServicesUrl(0);
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR rebind service @ {0}", serviceUrl);
