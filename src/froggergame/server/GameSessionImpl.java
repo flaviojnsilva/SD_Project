@@ -10,7 +10,6 @@ public class GameSessionImpl implements GameSessionRI {
 
     private GameFactoryImpl gameFactoryImpl;
     private ArrayList<FroggerGameRI> gamegroups;
-
     private String email;
 
     public GameSessionImpl(GameFactoryImpl gameFactory, String email) throws RemoteException {
@@ -50,15 +49,9 @@ public class GameSessionImpl implements GameSessionRI {
     }
 
     @Override
-    public String listGame() throws RemoteException {
+    public ArrayList<Game> listGame() throws RemoteException {
 
-        //fazer logs e confirmar se gamegroups realmente null
-        //Imprimir arraylist de jogos
-        for (FroggerGameRI item : this.gamegroups) {
-            System.out.print(item);
-
-        }
-        return null;
+        return this.gameFactoryImpl.getDbMockup().printGames();
     }
 
     @Override
@@ -66,4 +59,3 @@ public class GameSessionImpl implements GameSessionRI {
         this.gameFactoryImpl.destroySession(this.email);
     }
 }
-

@@ -6,15 +6,10 @@ import java.io.Serializable;
 
 public class Game implements Serializable {
     int id = 0;
-
     private int maxPlayers;
-
     private int difficulty;
-
     private FroggerGameRI froggerGameRI;
-
     private PlayerRI playerRI;
-
     GameFactoryImpl gameFactoryImpl;
 
     public Game(int id, int maxPlayers, int difficulty, FroggerGameRI froggerGameRI) {

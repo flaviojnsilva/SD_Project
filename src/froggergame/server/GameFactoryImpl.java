@@ -15,7 +15,6 @@ import java.util.HashMap;
  */
 
 public class GameFactoryImpl extends UnicastRemoteObject implements GameFactoryRI {
-
     private DBMockup dbMockup;
     private HashMap<String, GameSessionImpl> match_userSession;
 

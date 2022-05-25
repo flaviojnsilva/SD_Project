@@ -5,10 +5,9 @@ import java.util.ArrayList;
 /**
  * This class simulates a DBMockup for managing users and books.
  *
- * @author rmoreira
+ * @author rmoreiraz
  */
 public class DBMockup {
-
     private final ArrayList<User> users;
     private final ArrayList<Game> games;
 
@@ -36,11 +35,8 @@ public class DBMockup {
     }
 
     public Game insert(int id, int dif, int maxPlayers, FroggerGameRI froggerGameRI) {
-
         Game a = new Game(id, maxPlayers, dif, froggerGameRI);
-
         games.add(a);
-
         return a;
     }
 
@@ -62,7 +58,6 @@ public class DBMockup {
     }
 
     public Game select(int id) {
-
         for (Game game : games) {
             if (game.id == id) {
                 return game;
@@ -71,7 +66,6 @@ public class DBMockup {
         return null;
     }
 
-
     public User getUser(String username) {
         for (User u : this.users) {
             if (u.getEmail().compareTo(username) == 0) {
@@ -79,5 +73,16 @@ public class DBMockup {
             }
         }
         return null;
+    }
+
+    // arrayList games: foreach para percorrer os jogos + print dos games(id) com retorno
+
+
+    public ArrayList<Game> printGames() {
+        for (Game game : games
+        ) {
+            System.out.println(game.id);
+        }
+        return games;
     }
 }

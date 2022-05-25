@@ -8,7 +8,6 @@ package froggergame.server;
  * @author rmoreira
  */
 public class User {
-
     private String email;
     private String pword;
 

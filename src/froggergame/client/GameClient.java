@@ -77,7 +77,6 @@ public class GameClient implements Serializable {
                 //Get service url (including servicename)
                 String serviceUrl = contextRMI.getServicesUrl(0);
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR lookup service @ {0}", serviceUrl);
-
                 //============ Get proxy MAIL_TO_ADDR HelloWorld service ============
                 gameFactoryRI = (GameFactoryRI) registry.lookup(serviceUrl);
             } else {
@@ -92,12 +91,9 @@ public class GameClient implements Serializable {
 
     private void playService() {
         try {
-
             //visualizar jogos e permitir juntar....
-//verificar nº jogadores,  é minimo, permite mais...
-
+            //verificar nº jogadores,  é minimo, permite mais...
             menu();
-
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
@@ -117,16 +113,13 @@ public class GameClient implements Serializable {
         Scanner difficulty = new Scanner(System.in);
         System.out.println("Introduza a dificuldade:");
         int dif = difficulty.nextInt();
-        System.out.println("Introduza o numero maximo de jogadores:");
+        System.out.println("Introduza o número máximo de jogadores:");
         int max = difficulty.nextInt();
 
         //chama o Create Game
         PlayerRI playerRI = new PlayerImpl(1);
-
         Game game = gameSessionRI.createGame(1, dif, max, playerRI);
-
         playerRI.setFroggerGameRI(game.getFroggerGameRI());
-
         Main f = new Main(game, playerRI);
         f.run();
         System.out.println("Jogo criado com sucesso!");
@@ -134,8 +127,8 @@ public class GameClient implements Serializable {
         return game;
     }
 
-    private static void escolherjogo(GameSessionRI gameSessionRI) throws RemoteException {
-        System.out.println("Lista dos jogos disponiveis:");
+    /*private static void escolherjogo(GameSessionRI gameSessionRI) throws RemoteException {
+        System.out.println("Lista dos jogos disponíveis:");
         assert gameSessionRI != null;
         gameSessionRI.listGame();
         Scanner escolherJogo = new Scanner(System.in);
@@ -147,7 +140,7 @@ public class GameClient implements Serializable {
 
         Main f = new Main(game, playerRI);
         f.run();
-    }
+    }*/
 
     private void print(String s) {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, s);
@@ -155,20 +148,18 @@ public class GameClient implements Serializable {
 
     private void menu() throws RemoteException {
         Scanner menu = new Scanner(System.in);
-
         System.out.print("##--Frogger Game--##\n\n");
-        System.out.print("|---------------------------|\n");
-        System.out.print("| Opção 1 - Registrar-me    |\n");
-        System.out.print("| Opção 2 - Novo Jogo       |\n");
-        System.out.print("| Opção 3 - Juntar-me a jogo|\n");
-        System.out.print("| Opção 4 - Sair            |\n");
-        System.out.print("|---------------------------|\n");
+        System.out.print("|----------------------------|\n");
+        System.out.print("| Opção 1 - Registar-me      |\n");
+        System.out.print("| Opção 2 - Novo Jogo        |\n");
+        System.out.print("| Opção 3 - Juntar-me a Jogo |\n");
+        System.out.print("| Opção 4 - Sair             |\n");
+        System.out.print("|----------------------------|\n");
         System.out.print("Digite uma opção: ");
 
         int option = menu.nextInt();
 
         switch (option) {
-
             case 1:
                 System.out.print("\nRegisto\n");
                 Scanner email = new Scanner(System.in);  // Create a Scanner object
@@ -177,15 +168,10 @@ public class GameClient implements Serializable {
                 Scanner password = new Scanner(System.in);  // Create a Scanner object
                 System.out.println("Introduza a password:");
                 String passWord = password.nextLine();  // Read user input
-
                 boolean r = this.gameFactoryRI.register(eMail, passWord);
-
                 menu();
-
                 break;
-
             case 2:
-
                 System.out.print("\nNovo Jogo");
                 System.out.print("\nFaça Login\n");
                 Scanner username2 = new Scanner(System.in);  // Create a Scanner object
@@ -215,28 +201,39 @@ public class GameClient implements Serializable {
                 System.out.println("Introduza a password:");
                 String passWord3 = password3.nextLine();
                 GameSessionRI gameSessionRI2 = this.gameFactoryRI.login(userName3, passWord3);
-
                 if (gameSessionRI2 == null) {
-                    System.out.println("Nao está registado\nEfetue primeiro o registo");
+                    System.out.println("Não está registado\nEfetue primeiro o registo");
                     menu();
                 } else {
-
                     if (gameSessionRI2.listGame() == null) {
-
-                        System.out.println("Nao exitem jogos disponiveis.\nCrie um novo jogo\n");
+                        System.out.println("Não existem jogos disponiveis.\nCrie um novo jogo\n");
                         menu();
                     } else {
-                        gameSessionRI2.listGame();
-                        menu();
+
+                        ArrayList<Game> games = gameSessionRI2.listGame();
+                        for (Game jogos : games
+                        ) {
+                            System.out.println(jogos.getId());
+                        }
+
+                        Scanner choosedGame = new Scanner(System.in);
+
+                        int game = choosedGame.nextInt();
+
+                        PlayerRI playerRI = new PlayerImpl(1);
+
+                        Game jogo1 = gameSessionRI2.chooseGame(game, playerRI);
+
+                        playerRI.setFroggerGameRI(jogo1.getFroggerGameRI());
+
+                        Main f = new Main(jogo1, playerRI);
+                        f.run();
                     }
                 }
-
                 break;
-
             default:
                 System.out.print("\nOpção Inválida!");
                 break;
-
             case 4:
                 System.out.print("\nAté Breve.");
                 menu.close();

@@ -4,6 +4,7 @@ import froggergame.client.PlayerRI;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 /**
  * <p>Title: Projecto SD</p>
@@ -16,20 +17,11 @@ import java.rmi.RemoteException;
  */
 
 public interface GameSessionRI extends Remote {
-
     public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI) throws RemoteException;
 
-    public String listGame() throws RemoteException;
+    public ArrayList<Game> listGame() throws RemoteException;
 
     public void logout() throws RemoteException;
 
     Game chooseGame(int jogo, PlayerRI playerRI) throws RemoteException;
-
-    //TODO() acrescentar jogo e juntar-se ao jogo + método jogos ativos no momento a juntar ao jogo
-
-    //TODO() com classe State para ter o estado atual do jogo: notifiyAll, attach e dettach + getState e setState (servidor) ->> checkar aul do observer
-    //TODO() lado do cliente método updateState()
-
-    //TODO() commit
-
 }
