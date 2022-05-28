@@ -69,7 +69,7 @@ public class LoginFrame extends JFrame implements ActionListener {
             userText = emailTextField.getText();
             pwdText = passwordField.getSelectedText();
             if (userText.equalsIgnoreCase("mehtab") && pwdText.equalsIgnoreCase("12345")) {
-                JOptionPane.showMessageDialog(this, "froggergame.GUI.Login Successful");
+                JOptionPane.showMessageDialog(this, "froggergame.rmi.GUI.Login Successful");
             } else if (!userText.equalsIgnoreCase("mehtab")) {
 
                 JOptionPane.showMessageDialog(this, "User Don't Exist!\nPlease register first.");

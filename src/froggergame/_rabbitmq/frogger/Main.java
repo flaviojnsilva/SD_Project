@@ -23,25 +23,23 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
+package froggergame._rabbitmq.frogger;
 
-import java.awt.event.KeyEvent;
-import java.rmi.RemoteException;
-
-import froggergame.client.PlayerImpl;
+import froggergame._rabbitmq.chatgui.Observer;
 import froggergame.client.PlayerRI;
-import froggergame.server.FroggerGameImpl;
-import froggergame.server.FroggerGameRI;
 import froggergame.server.Game;
 import jig.engine.ImageResource;
 import jig.engine.PaintableCanvas;
+import jig.engine.PaintableCanvas.JIGSHAPE;
 import jig.engine.RenderingContext;
 import jig.engine.ResourceFactory;
-import jig.engine.PaintableCanvas.JIGSHAPE;
 import jig.engine.hli.ImageBackgroundLayer;
 import jig.engine.hli.StaticScreenGame;
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.util.Vector2D;
+
+import java.awt.event.KeyEvent;
+import java.rmi.RemoteException;
 
 public class Main extends StaticScreenGame {
     static final int WORLD_WIDTH = (13 * 32);
@@ -99,13 +97,16 @@ public class Main extends StaticScreenGame {
     private boolean keyPressed = false;
     private boolean listenInput = true;
 
+    public Observer observer;
+
     /**
      * Initialize game objects
      */
-    public Main(Game game, PlayerRI playerRI) {
+    public Main(Observer observer) {
 
         super(WORLD_WIDTH, WORLD_HEIGHT, false);
 
+        this.observer = observer;
         gameframe.setTitle("Frogger");
 
         ResourceFactory.getFactory().loadResources(RSC_PATH, "resources.xml");
@@ -132,7 +133,7 @@ public class Main extends StaticScreenGame {
         movingObjectsLayer = new AbstractBodyLayer.IterativeUpdate<MovingEntity>();
         particleLayer = new AbstractBodyLayer.IterativeUpdate<MovingEntity>();
 
-        initializeLevel(game.getDifficulty());
+        initializeLevel(1);
     }
 
 

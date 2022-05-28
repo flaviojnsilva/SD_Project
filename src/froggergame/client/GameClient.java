@@ -1,5 +1,8 @@
 package froggergame.client;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import froggergame.frogger.Main;
 import froggergame.server.Game;
 import froggergame.server.GameFactoryRI;
@@ -32,7 +35,7 @@ import java.util.logging.Logger;
 public class GameClient implements Serializable {
 
     /**
-     * Context for connecting a RMI froggergame.client MAIL_TO_ADDR a RMI Servant
+     * Context for connecting a RMI froggergame.rmi.client MAIL_TO_ADDR a RMI Servant
      */
     private SetupContextRMI contextRMI;
     /**
@@ -42,10 +45,10 @@ public class GameClient implements Serializable {
 
     public static void main(String[] args) {
         if (args != null && args.length < 2) {
-            System.err.println("usage: java [options] edu.ufp.sd.inf.rmi._01_helloworld.froggergame.server.HelloWorldClient <rmi_registry_ip> <rmi_registry_port> <service_name>");
+            System.err.println("usage: java [options] edu.ufp.sd.inf.rmi._01_helloworld.froggergame.rmi.server.HelloWorldClient <rmi_registry_ip> <rmi_registry_port> <service_name>");
             System.exit(-1);
         } else {
-            //1. ============ Setup froggergame.client RMI context ============
+            //1. ============ Setup froggergame.rmi.client RMI context ============
             GameClient hwc = new GameClient(args);
             //2. ============ Lookup service ============
             hwc.lookupService();
@@ -109,7 +112,7 @@ public class GameClient implements Serializable {
         }
     }
 
-    private static Game criarjogo(GameSessionRI gameSessionRI) throws RemoteException {
+    private static Game criarjogo(GameSessionRI gameSessionRI, String token) throws RemoteException {
         Scanner difficulty = new Scanner(System.in);
         System.out.println("Introduza a dificuldade:");
         int dif = difficulty.nextInt();
@@ -118,7 +121,7 @@ public class GameClient implements Serializable {
 
         //chama o Create Game
         PlayerRI playerRI = new PlayerImpl(1);
-        Game game = gameSessionRI.createGame(1, dif, max, playerRI);
+        Game game = gameSessionRI.createGame(1, dif, max, playerRI, token);
         playerRI.setFroggerGameRI(game.getFroggerGameRI());
         Main f = new Main(game, playerRI);
         f.run();
@@ -182,12 +185,26 @@ public class GameClient implements Serializable {
                 String passWord2 = password2.nextLine();  // Read user input
                 GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName2, passWord2);
 
+                String token = "";
+
+                try {
+                    Algorithm algorithm = Algorithm.HMAC256("secret");
+                    token = JWT.create()
+                            .withIssuer(userName2)
+                            .sign(algorithm);
+                } catch (JWTCreationException exception) {
+                    //Invalid Signing configuration / Couldn't convert Claims.
+                }
+
+                gameSessionRI.setStringToken(token);
+                gameSessionRI.setEmail(userName2);
+
                 if (gameSessionRI == null) {
                     System.out.println("Nao está registado\n Efetue primeiro o registo");
                     menu();
                 } else {
                     PlayerRI observerRI = new PlayerImpl(1);
-                    Game game = criarjogo(gameSessionRI);
+                    Game game = criarjogo(gameSessionRI, token);
                     menu();
                 }
                 break;

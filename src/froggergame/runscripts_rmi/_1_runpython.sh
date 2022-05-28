@@ -4,7 +4,7 @@
 #REM Author: Rui S. Moreira
 #REM Date: 20/02/2014
 #REM ************************************************************************************
-#REM Script usage: runclient <role> (where role should be: froggergame.server / froggergame.client)
+#REM Script usage: runclient <role> (where role should be: froggergame.rmi.server / froggergame.rmi.client)
 #source ./setclientenv.sh
 source ./setenv.sh server
 

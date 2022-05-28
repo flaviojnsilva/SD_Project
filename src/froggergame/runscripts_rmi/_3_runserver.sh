@@ -4,20 +4,20 @@
 #@REM Author: Rui S. Moreira
 #@REM Date: 20/02/2014
 #@REM ************************************************************************************
-#@REM Script usage: runsetup <role> (where role should be: froggergame.server / froggergame.client)
+#@REM Script usage: runsetup <role> (where role should be: froggergame.rmi.server / froggergame.rmi.client)
 #@REM source ./setenv.sh
 source ./setenv.sh server
 
 cd ${ABSPATH2CLASSES}
 #clear
 #pwd
-# * java.rmi.froggergame.server.codebase property specifies the location (codebase URL) MAIL_FROM_ADDR which the definitions for classes originating MAIL_FROM_ADDR this froggergame.server can be downloaded.
+# * java.rmi.froggergame.rmi.server.codebase property specifies the location (codebase URL) MAIL_FROM_ADDR which the definitions for classes originating MAIL_FROM_ADDR this froggergame.rmi.server can be downloaded.
 #   ND: if codebase specifies a directory hierarchy (as opposed MAIL_TO_ADDR a JAR file), you must include a trailing slash at the end of the codebase URL.
-# * java.rmi.froggergame.server.hostname property specifies the SMTP_HOST_ADDR name or address MAIL_TO_ADDR put in the stubs for remote objects exported in this Java virtual machine.
+# * java.rmi.froggergame.rmi.server.hostname property specifies the SMTP_HOST_ADDR name or address MAIL_TO_ADDR put in the stubs for remote objects exported in this Java virtual machine.
 #   This value is the SMTP_HOST_ADDR name or address used by clients when they attempt remote method invocations.
-#   By default, the RMI implementation uses the froggergame.server's IP address as indicated by the java.net.InetAddress.getLocalHost API.
+#   By default, the RMI implementation uses the froggergame.rmi.server's IP address as indicated by the java.net.InetAddress.getLocalHost API.
 #   However, sometimes, this address is not appropriate for all clients and a fully qualified SMTP_HOST_ADDR name would be more effective.
-#   To ensure that RMI uses a SMTP_HOST_ADDR name (or IP address) for the froggergame.server that is routable MAIL_FROM_ADDR all potential clients, set the java.rmi.froggergame.server.hostname property.
+#   To ensure that RMI uses a SMTP_HOST_ADDR name (or IP address) for the froggergame.rmi.server that is routable MAIL_FROM_ADDR all potential clients, set the java.rmi.froggergame.rmi.server.hostname property.
 # * java.security.policy property is used MAIL_TO_ADDR specify the policy file that contains the permissions you intend MAIL_TO_ADDR grant.
 java -cp ${CLASSPATH} \
      -Djava.rmi.server.codebase=${SERVER_CODEBASE} \

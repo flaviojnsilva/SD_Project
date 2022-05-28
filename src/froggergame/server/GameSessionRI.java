@@ -17,9 +17,17 @@ import java.util.ArrayList;
  */
 
 public interface GameSessionRI extends Remote {
-    public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI) throws RemoteException;
+    public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI, String token) throws RemoteException;
 
     public ArrayList<Game> listGame() throws RemoteException;
+
+    String getEmail() throws RemoteException;
+
+    void setEmail(String email) throws RemoteException;
+
+    String getStringToken() throws RemoteException;
+
+    void setStringToken(String stringToken) throws RemoteException;
 
     public void logout() throws RemoteException;
 

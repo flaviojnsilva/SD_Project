@@ -23,7 +23,7 @@ start_registry(){
   sh _2_runregistry.sh &
 }
 
-#froggergame.server
+#froggergame.rmi.server
 start_server(){
   sh _3_runserver.sh &
 }
