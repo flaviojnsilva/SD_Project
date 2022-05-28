@@ -83,7 +83,7 @@ public class Frogger extends MovingEntity {
         collisionObjects.add(new CollisionObject(position));
     }
 
-    public Frogger(Main g, PlayerRI playerRI, Vector2D pos) {
+    /*public Frogger(Main g, PlayerRI playerRI, Vector2D pos) {
         super(Main.SPRITE_SHEET + "#frog");
         this.playerRI=playerRI;
         this.pos=pos;
@@ -92,7 +92,7 @@ public class Frogger extends MovingEntity {
         collisionObjects.add(new CollisionObject(position));
         g.GameLives=froggerLives;
         this.size=game.nfrogs;
-    }
+    }*/
 
     /**
      * Reset the Frogger to default state and position

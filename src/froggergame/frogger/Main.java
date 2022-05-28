@@ -34,7 +34,6 @@ import froggergame.client.PlayerRI;
 import froggergame.server.FroggerGameImpl;
 import froggergame.server.FroggerGameRI;
 import froggergame.server.Game;
-import froggergame.server.State;
 import jig.engine.ImageResource;
 import jig.engine.PaintableCanvas;
 import jig.engine.RenderingContext;
@@ -51,16 +50,15 @@ public class Main extends StaticScreenGame {
     static final Vector2D FROGGER_START = new Vector2D(6 * 32, WORLD_HEIGHT - 32);
 
     static final String RSC_PATH = "froggergame/resources/";
-    static String SPRITE_SHEET = RSC_PATH + "frogger_sprites.png";
+    static final String SPRITE_SHEET = RSC_PATH + "frogger_sprites.png";
 
     static final int FROGGER_LIVES = 5;
     static final int STARTING_LEVEL = 1;
     static final int DEFAULT_LEVEL_TIME = 60;
 
-    private final ArrayList<FroggerCollisionDetection> frogCol = new ArrayList<>();
-    private ArrayList<Frogger> frogs;
-
-    private PlayerRI playerRI;
+    private FroggerCollisionDetection frogCol;
+    private Frogger frog;
+    //private ArrayList<Frogger> frogs;
     private AudioEfx audiofx;
     private FroggerUI ui;
     private WindGust wind;
@@ -93,7 +91,7 @@ public class Main extends StaticScreenGame {
     protected int GameState = GAME_INTRO;
     protected int GameLevel = STARTING_LEVEL;
 
-    public int GameLives;
+    public int GameLives = FROGGER_LIVES;
     public int GameScore = 0;
 
     public int levelTimer = DEFAULT_LEVEL_TIME;
@@ -102,25 +100,12 @@ public class Main extends StaticScreenGame {
     private boolean keyPressed = false;
     private boolean listenInput = true;
 
-    private FroggerGameRI froggerGameRI;
-
-    private ArrayList<Vector2D> frogsPosition = new ArrayList<>();
-    private RenderingContext rc2;
-    public int nfrogs = 0;
-
     /**
      * Initialize game objects
      */
     public Main(Game game, PlayerRI playerRI) {
 
         super(WORLD_WIDTH, WORLD_HEIGHT, false);
-
-        this.frogs = new ArrayList<Frogger>();
-
-        playerRI.setMain(this);
-        this.playerRI = playerRI;
-        this.GameLevel = game.getDifficulty();
-        this.froggerGameRI = game.getFroggerGameRI();
 
         gameframe.setTitle("Frogger");
 
@@ -137,16 +122,9 @@ public class Main extends StaticScreenGame {
         PaintableCanvas.loadDefaultFrames("col", 30, 30, 2, JIGSHAPE.RECTANGLE, null);
         PaintableCanvas.loadDefaultFrames("colSmall", 4, 4, 2, JIGSHAPE.RECTANGLE, null);
 
-
-        this.frogs = new ArrayList<Frogger>();
-
-        for (Frogger frog : this.frogs) {
-
-            frogCol.add(new FroggerCollisionDetection(frog));
-            //audiofx = new AudioEfx(frogCol, frog);
-
-        }
-
+        frog = new Frogger(this);
+        frogCol = new FroggerCollisionDetection(frog);
+        audiofx = new AudioEfx(frogCol, frog);
         ui = new FroggerUI(this);
         wind = new WindGust();
         hwave = new HeatWave();
@@ -158,33 +136,6 @@ public class Main extends StaticScreenGame {
         initializeLevel(game.getDifficulty());
     }
 
-    public void createFrogs(Game game) throws RemoteException {
-        nfrogs = game.getFroggerGameRI().getFroggers().size();
-        System.out.println("Frogger's number: ");
-
-        for (int i = 0; i < nfrogs; i++) {
-            frogsPosition.add(new Vector2D((6 * 32) + i * 50, WORLD_HEIGHT - 32));
-
-        }
-        for (int j = 1; j < nfrogs; j++) {
-            SPRITE_SHEET = RSC_PATH + "frogger sprites" + j + ".png";
-
-            game.getFroggerRI().getFroggers().get(j - 1).setId(j - 1);
-
-            Frogger frog = new Frogger(this, playerRI, frogsPosition.get(j - 1));
-            frogs.add((frog));
-
-        }
-
-        GameLives = frogs.get(playerRI.getId()).froggerlives;
-        int k = 0;
-        for (Frogger frogger : frogs) {
-            frogger.setPosition(frogsPosition.get(k));
-            k++;
-
-        }
-
-    }
 
     public void initializeLevel(int level) {
 
@@ -280,8 +231,7 @@ public class Main extends StaticScreenGame {
         if ((m = wind.genParticles(GameLevel)) != null) particleLayer.add(m);
 
         // HeatWave
-        for (Frogger frog : frogs)
-            if ((m = hwave.genParticles(frog.getCenterPosition())) != null) particleLayer.add(m);
+        if ((m = hwave.genParticles(frog.getCenterPosition())) != null) particleLayer.add(m);
 
         movingObjectsLayer.update(deltaMs);
         particleLayer.update(deltaMs);
@@ -290,7 +240,7 @@ public class Main extends StaticScreenGame {
     /**
      * Handling Frogger movement from keyboard input
      */
-    public void froggerKeyboardHandler() throws RemoteException {
+    public void froggerKeyboardHandler() {
         keyboard.poll();
 
         boolean keyReleased = false;
@@ -300,15 +250,13 @@ public class Main extends StaticScreenGame {
         boolean rightPressed = keyboard.isPressed(KeyEvent.VK_RIGHT);
 
         // Enable/Disable cheating
-        for (Frogger frog : frogs) {
-            if (keyboard.isPressed(KeyEvent.VK_C))
-                frog.cheating = true;
-            if (keyboard.isPressed(KeyEvent.VK_V))
-                frog.cheating = false;
-            if (keyboard.isPressed(KeyEvent.VK_0)) {
-                GameLevel = 10;
-                initializeLevel(GameLevel);
-            }
+        if (keyboard.isPressed(KeyEvent.VK_C))
+            frog.cheating = true;
+        if (keyboard.isPressed(KeyEvent.VK_V))
+            frog.cheating = false;
+        if (keyboard.isPressed(KeyEvent.VK_0)) {
+            GameLevel = 10;
+            initializeLevel(GameLevel);
         }
 
 
@@ -323,18 +271,10 @@ public class Main extends StaticScreenGame {
             keyReleased = true;
 
         if (listenInput) {
-            if (downPressed) {
-                froggerGameRI.setFroggerGameState(new State(playerRI.getId(), "Down pressed"));
-            }
-            if (upPressed) {
-                froggerGameRI.setFroggerGameState(new State(playerRI.getId(), "Up pressed"));
-            }
-            if (leftPressed) {
-                froggerGameRI.setFroggerGameState(new State(playerRI.getId(), "Left pressed"));
-            }
-            if (rightPressed) {
-                froggerGameRI.setFroggerGameState(new State(playerRI.getId(), "Right pressed"));
-            }
+            if (downPressed) frog.moveDown();
+            if (upPressed) frog.moveUp();
+            if (leftPressed) frog.moveLeft();
+            if (rightPressed) frog.moveRight();
 
             if (keyPressed)
                 listenInput = false;
@@ -348,7 +288,7 @@ public class Main extends StaticScreenGame {
         if (keyboard.isPressed(KeyEvent.VK_ESCAPE))
             GameState = GAME_INTRO;
     }
-//todo recebe State min 05:52
+
     /**
      * Handle keyboard events while at the game intro menu
      */
