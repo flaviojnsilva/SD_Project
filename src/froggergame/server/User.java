@@ -25,10 +25,6 @@ public class User {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     /**
      * @return the pword
      */
@@ -36,10 +32,4 @@ public class User {
         return pword;
     }
 
-    /**
-     * @param pword the pword to set
-     */
-    public void setPword(String pword) {
-        this.pword = pword;
-    }
 }

@@ -21,15 +21,9 @@ public interface GameSessionRI extends Remote {
 
     public ArrayList<Game> listGame() throws RemoteException;
 
-    String getEmail() throws RemoteException;
-
     void setEmail(String email) throws RemoteException;
 
-    String getStringToken() throws RemoteException;
-
     void setStringToken(String stringToken) throws RemoteException;
-
-    public void logout() throws RemoteException;
 
     Game chooseGame(int jogo, PlayerRI playerRI) throws RemoteException;
 }

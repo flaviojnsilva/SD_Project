@@ -17,10 +17,6 @@ public class DBMockup {
     }
 
     /**
-     * This constructor creates and inits the database with some users.
-     */
-
-    /**
      * Registers a new user.
      *
      * @param e email
@@ -54,7 +50,6 @@ public class DBMockup {
             }
         }
         return false;
-        //return ((u.equalsIgnoreCase("guest") && p.equalsIgnoreCase("ufp")) ? true : false);
     }
 
     public Game select(int id) {
@@ -74,9 +69,6 @@ public class DBMockup {
         }
         return null;
     }
-
-    // arrayList games: foreach para percorrer os jogos + print dos games(id) com retorno
-
 
     public ArrayList<Game> printGames() {
         for (Game game : games

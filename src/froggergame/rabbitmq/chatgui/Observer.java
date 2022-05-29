@@ -1,4 +1,4 @@
-package froggergame._rabbitmq.chatgui;
+package froggergame.rabbitmq.chatgui;
 
 import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.*;
@@ -27,9 +27,6 @@ public class Observer {
     //Store received message to be get by gui
     private String receivedMessage;
 
-    /**
-     * @param gui
-     */
     public Observer(ObserverGuiClient gui, String host, int port, String user, String pass, String exchangeName, BuiltinExchangeType exchangeType, String messageFormat) throws IOException, TimeoutException {
         this.gui = gui;
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, " going to attach observer to host: " + host + "...");
@@ -39,8 +36,6 @@ public class Observer {
 
         this.exchangeName = exchangeName;
         this.exchangeType = exchangeType;
-        //String[] bindingKeys={"",""};
-        //this.exchangeBindingKeys=bindingKeys;
         this.messageFormat = messageFormat;
 
         bindExchangeToChannelRabbitMQ();
@@ -53,7 +48,6 @@ public class Observer {
     private void bindExchangeToChannelRabbitMQ() throws IOException, TimeoutException {
         Logger.getLogger(this.getClass().getName()).log(Level.INFO, "Declaring Exchange '" + this.exchangeName + "' with type " + this.exchangeType);
 
-        /* TODO: Declare exchange type  */
         channelToRabbitMq.exchangeDeclare(exchangeName, exchangeType);
     }
 
@@ -62,11 +56,8 @@ public class Observer {
      */
     public void attachConsumerToChannelExchangeWithKey() {
         try {
-            /* TODO: Create a non-durable, exclusive, autodelete queue with a generated name.
-                The string queueName will contain a random queue name (e.g. amq.gen-JzTY20BRgKO-HjmUJj0wLg) */
             String queueName = channelToRabbitMq.queueDeclare().getQueue();
 
-            /* TODO: Create binding: tell exchange to send messages to a queue; fanout exchange ignores the last parameter (binding key) */
             String routingKey = "";
             channelToRabbitMq.queueBind(queueName, exchangeName, routingKey);
 
@@ -87,36 +78,11 @@ public class Observer {
                 System.out.println(" [x] Consumer Tag [" + consumerTag + "] - Cancel Callback invoked!");
             };
 
-            // TODO: Consume with deliver and cancel callbacks
             channelToRabbitMq.basicConsume(queueName, true, deliverCallback, cancelCallback);
-
 
         } catch (Exception e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, e.toString());
         }
-    }
-
-    /**
-     * Publish messages to existing exchange instead of the nameless one.
-     * - The routingKey is empty ("") since the fanout exchange ignores it.
-     * - Messages will be lost if no queue is bound to the exchange yet.
-     * - Basic properties can be: MessageProperties.PERSISTENT_TEXT_PLAIN, etc.
-     */
-    public void sendMessage(String msgToSend) throws IOException {
-        //RoutingKey will be ignored by FANOUT exchange
-        String routingKey = "";
-        BasicProperties prop = MessageProperties.PERSISTENT_TEXT_PLAIN;
-
-        // TODO: Publish message
-        channelToRabbitMq.basicPublish(exchangeName, routingKey, prop,
-                msgToSend.getBytes("UTF-8"));
-    }
-
-    /**
-     * @return the most recent message received from the broker
-     */
-    public String getReceivedMessage() {
-        return receivedMessage;
     }
 
     /**

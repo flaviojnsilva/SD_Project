@@ -23,46 +23,26 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame._rabbitmq.frogger;
+package froggergame.rabbitmq.frogger;
+
 import jig.engine.util.Vector2D;
-
-public class Goal extends MovingEntity {
+  
+public class Truck extends MovingEntity {
 	
-	public boolean isReached = false;
-	public boolean isBonus = false;
-	
-	public Goal(int loc) {
-		super(Main.SPRITE_SHEET + "#goal");
-		position = new Vector2D(32*(1+2*loc), 32);
-		collisionObjects.add(new CollisionObject("colSmall", position));
-		sync(position);
-		setFrame(0);
-	}
+	public static int LENGTH = 32*2;
 
-	public Goal(Vector2D pos) {
-		super(Main.SPRITE_SHEET + "#goal");
+	public Truck (Vector2D pos, Vector2D v) {
+		super(Main.SPRITE_SHEET + "#truck");
 		position = pos;
-		collisionObjects.add(new CollisionObject("colSmall", position));
-		sync(position);
-		setFrame(0);		
-	}
-	
-	public void reached() {
-		isReached = true;
-		setFrame(1);
-	}
-	
-	public void setBonus(boolean b) {
-		if (b) {
-			isBonus = true;
-			setFrame(2);
-		} else {
-			isBonus = false;
+		Vector2D posSphere1 = position;
+		Vector2D posSphere2 = new Vector2D(position.getX()+32, position.getY());
+		collisionObjects.add(new CollisionObject(posSphere1));
+		collisionObjects.add(new CollisionObject(posSphere2));
+		velocity = v;
+		
+		if (v.getX() < 0)
+			setFrame(1);
+		else
 			setFrame(0);
-		}
-	}
-	
-	public void update(long deltaMs) {
-		;
 	}
 }

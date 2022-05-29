@@ -9,8 +9,6 @@ public class Game implements Serializable {
     private int maxPlayers;
     private int difficulty;
     private FroggerGameRI froggerGameRI;
-    private PlayerRI playerRI;
-    GameFactoryImpl gameFactoryImpl;
 
     public Game(int id, int maxPlayers, int difficulty, FroggerGameRI froggerGameRI) {
         this.id = id;
@@ -23,24 +21,8 @@ public class Game implements Serializable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    public void setMaxPlayers(int maxPlayers) {
-        this.maxPlayers = maxPlayers;
-    }
-
     public int getDifficulty() {
         return difficulty;
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
     }
 
     public FroggerGameRI getFroggerGameRI() {

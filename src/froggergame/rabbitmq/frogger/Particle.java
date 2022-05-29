@@ -23,26 +23,54 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame._rabbitmq.frogger;
+package froggergame.rabbitmq.frogger;
 
 import jig.engine.util.Vector2D;
-  
-public class Truck extends MovingEntity {
-	
-	public static int LENGTH = 32*2;
 
-	public Truck (Vector2D pos, Vector2D v) {
-		super(Main.SPRITE_SHEET + "#truck");
+/**
+ * Simple tiny particle
+ * 
+ * Used to show some weather effects
+ * 
+ * @author vitaliy
+ *
+ */
+public class Particle extends MovingEntity {
+	
+	private int timeExpire = 1;
+	private int timeAlive = 1;
+	
+	public Particle(String sprite, Vector2D pos, Vector2D v) {
+		super(sprite);
 		position = pos;
-		Vector2D posSphere1 = position;
-		Vector2D posSphere2 = new Vector2D(position.getX()+32, position.getY());
-		collisionObjects.add(new CollisionObject(posSphere1));
-		collisionObjects.add(new CollisionObject(posSphere2));
 		velocity = v;
+		setActivation(true);
+		timeExpire = 0;
+	}
+	
+	/**
+	 * Build particle with expiration timer
+	 * 
+	 * @param pos - position
+	 * @param v - velocity
+	 * @param te - expiration timer in milliseconds
+	 */
+	public Particle(String sprite, Vector2D pos, Vector2D v, int te) {
+		super(sprite);
+		position = pos;
+		velocity = v;
+		setActivation(true);
+		timeExpire = te;
+	}
+	
+	public void update(final long deltaMs) {
+		super.update(deltaMs);
 		
-		if (v.getX() < 0)
-			setFrame(1);
-		else
-			setFrame(0);
+		// Check the expiration
+		if (timeExpire != 0) {
+			timeAlive += deltaMs;
+			if (timeAlive > timeExpire)
+				setActivation(false);
+		}
 	}
 }

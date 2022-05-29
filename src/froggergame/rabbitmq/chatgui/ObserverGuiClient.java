@@ -11,10 +11,10 @@
  * @author Rui Moreira
  * @version 2.0
  */
-package froggergame._rabbitmq.chatgui;
+package froggergame.rabbitmq.chatgui;
 
 import com.rabbitmq.client.BuiltinExchangeType;
-import froggergame._rabbitmq.frogger.Main;
+import froggergame.rabbitmq.frogger.Main;
 import froggergame.util.RabbitUtils;
 
 import javax.swing.*;
@@ -27,7 +27,6 @@ import java.util.logging.Logger;
  * @author rjm
  */
 public class ObserverGuiClient extends JFrame {
-
     private Observer observer;
 
     public Main main;
@@ -63,20 +62,6 @@ public class ObserverGuiClient extends JFrame {
     }
 
     //================================================ BEGIN TO CHANGE ================================================
-
-    /**
-     * Sends msg through the _05_observer to the exchange where all observers are binded
-     *
-     * @param msgToSend
-     */
-    private void sendMsg(String user, String msgToSend) {
-        try {
-            msgToSend = "[" + user + "]: " + msgToSend;
-            this.observer.sendMessage(msgToSend);
-        } catch (IOException ex) {
-            Logger.getLogger(ObserverGuiClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
 
     /**
      * @param args the command line arguments

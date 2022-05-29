@@ -17,14 +17,14 @@ export NETBEANS=NetBeans
 export INTELLIJ=IntelliJ
 export CURRENT_IDE=${INTELLIJ}
 #export CURRENT_IDE=¢{NETBEANS}
-export USERNAME=flaviojnsilva
+export USERNAME=anogueira
 
 #@REM ==== JAVA NAMING STUFF ====
 export JAVAPROJ_NAME=SD_Project
-export JAVAPROJ=/Users/flaviojnsilva/Desktop/SD_Project
+export JAVAPROJ=/Users/anogueira/Desktop/UFP-Projectos
 export RABBITMQ_SERVICES_FOLDER=froggergame
 export RABBITMQ_SERVICES_PACKAGE=froggergame
-export PACKAGE=_rabbitmq
+export PACKAGE=rabbitmq
 export QUEUE_NAME_PREFIX=pubsub
 export EXCHANGE_NAME_PREFIX=logs
 export PRODUCER_CLASS_PREFIX=EmitLogs
@@ -65,7 +65,7 @@ export JAVAPROJ_JAR_FILE=${JAVAPROJ}/${JAVAPROJ_DIST}/${JAVAPROJ_NAME}.jar
 export JAVA_LIB_FOLDER=${JAVAPROJ}/${JAVAPROJ_DIST_LIB}
 export JAVA_RABBITMQ_TOOLS=${JAVA_LIB_FOLDER}/amqp-client-5.11.0.jar:${JAVA_LIB_FOLDER}/slf4j-api-1.7.30.jar:${JAVA_LIB_FOLDER}/slf4j-simple-1.7.30.jar
 
-export CLASSPATH=${JAVAPROJ_CLASSES_FOLDER}:${JAVA_RABBITMQ_TOOLS}/Users/flaviojnsilva/Desktop/SD_Project/lib/ogg-spi/jogg-0.0.7.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/ogg-spi/jorbis-0.0.15.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/ogg-spi/tritonus_jorbis-0.3.6.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/spi/tritonus_share.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/jig-1.7.5.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/jackson-annotations-2.13.2.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/jackson-core-2.13.2.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/jackson-databind-2.13.2.jar:/Users/flaviojnsilva/Desktop/SD_Project/lib/java-jwt-3.19.0.jar
+export CLASSPATH=${JAVAPROJ_CLASSES_FOLDER}:${JAVA_RABBITMQ_TOOLS}/Users/anogueira/Desktop/UFP-Projectos/lib/ogg-spi/jogg-0.0.7.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/ogg-spi/jorbis-0.0.15.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/ogg-spi/tritonus_jorbis-0.3.6.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/spi/tritonus_share.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/jig-1.7.5.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/jackson-annotations-2.13.2.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/jackson-core-2.13.2.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/jackson-databind-2.13.2.jar:/Users/anogueira/Desktop/UFP-Projectos/lib/java-jwt-3.19.0.jar
 
 #export CLASSPATH=${JAVAPROJ_JAR_FILE}
 #export CLASSPATH=${JAVAPROJ_JAR_FILE}:${JAVA_RABBITMQ_TOOLS}

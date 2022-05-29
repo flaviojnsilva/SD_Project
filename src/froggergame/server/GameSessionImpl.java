@@ -14,13 +14,7 @@ import java.util.ArrayList;
 public class GameSessionImpl implements GameSessionRI {
 
     private GameFactoryImpl gameFactoryImpl;
-    private ArrayList<FroggerGameRI> gamegroups;
     private String stringToken;
-
-    @Override
-    public String getStringToken() throws RemoteException {
-        return stringToken;
-    }
 
     @Override
     public void setStringToken(String stringToken) throws RemoteException {
@@ -28,15 +22,9 @@ public class GameSessionImpl implements GameSessionRI {
     }
 
     @Override
-    public String getEmail() throws RemoteException {
-        return email;
-    }
-
-    @Override
     public void setEmail(String email) throws RemoteException {
         this.email = email;
     }
-
 
     private String email;
 
@@ -100,8 +88,4 @@ public class GameSessionImpl implements GameSessionRI {
         return this.gameFactoryImpl.getDbMockup().printGames();
     }
 
-    @Override
-    public void logout() throws RemoteException {
-        this.gameFactoryImpl.destroySession(this.email);
-    }
 }

@@ -1,4 +1,4 @@
-package froggergame.GUI;
+package froggergame.authgui;
 
 import froggergame.server.GameFactoryImpl;
 

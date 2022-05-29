@@ -1,8 +1,6 @@
 package froggergame.server;
 
 import froggergame.client.PlayerRI;
-
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 public class FroggerGameImpl implements FroggerGameRI {
@@ -10,9 +8,9 @@ public class FroggerGameImpl implements FroggerGameRI {
     private ArrayList<PlayerRI> players = new ArrayList<>();
 
     /**
-     * Adiciona um worker ao jobgroup
+     * Adiciona um player ao jogo
      *
-     * @param player worker a adicionar
+     * @param player a adicionar
      */
     //attach
     @Override
@@ -22,10 +20,6 @@ public class FroggerGameImpl implements FroggerGameRI {
         }
     }
 
-    public void removePlayer(PlayerRI playerRI) {
-        this.players.remove(playerRI);
-    }
-
     @Override
     public String toString() {
         return "Game{" +
@@ -33,36 +27,9 @@ public class FroggerGameImpl implements FroggerGameRI {
                 '}';
     }
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public ArrayList<PlayerRI> getPlayers() {
         return players;
     }
 
-    public void setPlayers(ArrayList<PlayerRI> players) {
-        this.players = players;
-    }
-
-    /**
-     * Pesquisa o player pelo id
-     *
-     * @param playerID id worker
-     * @return retorna o worker ou null se nao encontrar
-     */
-    public PlayerRI getPlayer(int playerID) throws RemoteException {
-        for (PlayerRI p : this.players) {
-            if (p.getId() == playerID) {
-                return p;
-            }
-        }
-        return null;
-    }
 }
 

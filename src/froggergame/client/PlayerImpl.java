@@ -1,7 +1,6 @@
 package froggergame.client;
 
 import froggergame.server.FroggerGameRI;
-
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -13,16 +12,6 @@ public class PlayerImpl extends UnicastRemoteObject implements PlayerRI {
     public PlayerImpl(int id) throws RemoteException {
         super();
         this.id = id;
-    }
-
-    @Override
-    public int getId() throws RemoteException {
-        return this.id;
-    }
-
-    @Override
-    public FroggerGameRI getFroggerGameRI() throws RemoteException {
-        return null;
     }
 
     @Override

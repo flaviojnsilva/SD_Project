@@ -1,14 +1,8 @@
 package froggergame.server;
 
 import froggergame.util.rmisetup.SetupContextRMI;
-
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
-import java.util.Properties;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -87,7 +81,6 @@ public class GameServer {
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR rebind service @ {0}", serviceUrl);
 
                 //============ Rebind servant ============
-                //Naming.bind(serviceUrl, helloWorldRI);
                 registry.rebind(serviceUrl, sessionFactoryRI);
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "service bound and running. :)");
             } else {
@@ -98,27 +91,5 @@ public class GameServer {
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private static void loadProperties() throws IOException {
-
-        Logger.getLogger(Thread.currentThread().getName()).log(Level.INFO, "goig MAIL_TO_ADDR load props...");
-        // create and load default properties
-        Properties defaultProps = new Properties();
-        FileInputStream in = new FileInputStream("defaultproperties.txt");
-        defaultProps.load(in);
-        in.close();
-
-        BiConsumer<Object, Object> bc = (key, value) -> {
-            System.out.println(key.toString() + "=" + value.toString());
-        };
-        defaultProps.forEach(bc);
-
-        // create application properties with default
-        Properties props = new Properties(defaultProps);
-
-        FileOutputStream out = new FileOutputStream("defaultproperties2.txt");
-        props.store(out, "---No Comment---");
-        out.close();
     }
 }

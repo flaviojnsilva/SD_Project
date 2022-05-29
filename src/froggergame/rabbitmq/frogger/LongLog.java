@@ -23,54 +23,30 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame._rabbitmq.frogger;
+package froggergame.rabbitmq.frogger;
 
 import jig.engine.util.Vector2D;
 
-/**
- * Simple tiny particle
- * 
- * Used to show some weather effects
- * 
- * @author vitaliy
- *
- */
-public class Particle extends MovingEntity {
+public class LongLog extends MovingEntity {
 	
-	private int timeExpire = 1;
-	private int timeAlive = 1;
+	public static int LENGTH = 32*4;
 	
-	public Particle(String sprite, Vector2D pos, Vector2D v) {
-		super(sprite);
+	public LongLog (Vector2D pos, Vector2D v) {
+		super(Main.SPRITE_SHEET + "#longlog");
 		position = pos;
+		Vector2D posSphere1 = position;
+		Vector2D posSphere2 = new Vector2D(position.getX()+32*1, position.getY());
+		Vector2D posSphere3 = new Vector2D(position.getX()+32*2, position.getY());
+		Vector2D posSphere4 = new Vector2D(position.getX()+32*3, position.getY());
+		collisionObjects.add(new CollisionObject("colSmall",posSphere1));
+		collisionObjects.add(new CollisionObject("colSmall",posSphere2));
+		collisionObjects.add(new CollisionObject("colSmall",posSphere3));
+		collisionObjects.add(new CollisionObject("colSmall",posSphere4));
 		velocity = v;
-		setActivation(true);
-		timeExpire = 0;
-	}
-	
-	/**
-	 * Build particle with expiration timer
-	 * 
-	 * @param pos - position
-	 * @param v - velocity
-	 * @param te - expiration timer in milliseconds
-	 */
-	public Particle(String sprite, Vector2D pos, Vector2D v, int te) {
-		super(sprite);
-		position = pos;
-		velocity = v;
-		setActivation(true);
-		timeExpire = te;
-	}
-	
-	public void update(final long deltaMs) {
-		super.update(deltaMs);
 		
-		// Check the expiration
-		if (timeExpire != 0) {
-			timeAlive += deltaMs;
-			if (timeAlive > timeExpire)
-				setActivation(false);
-		}
+		if (v.getX() < 0)
+			setFrame(1);
+		else
+			setFrame(0);
 	}
 }

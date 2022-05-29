@@ -17,6 +17,4 @@ public interface GameFactoryRI extends Remote {
     GameSessionRI login(String username, String password) throws RemoteException;
 
     boolean register(String email, String password) throws RemoteException;
-
-    void destroySession(String u) throws RemoteException;
 }

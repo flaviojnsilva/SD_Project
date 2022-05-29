@@ -45,11 +45,6 @@ public class GameFactoryImpl extends UnicastRemoteObject implements GameFactoryR
         return this.dbMockup.register(email, password);
     }
 
-    @Override
-    public void destroySession(String u) throws RemoteException {
-        this.match_userSession.remove(u);
-    }
-
     public DBMockup getDbMockup() {
         return dbMockup;
     }

@@ -94,8 +94,6 @@ public class GameClient implements Serializable {
 
     private void playService() {
         try {
-            //visualizar jogos e permitir juntar....
-            //verificar nº jogadores,  é minimo, permite mais...
             menu();
         } catch (RemoteException ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
@@ -112,14 +110,14 @@ public class GameClient implements Serializable {
         }
     }
 
-    private static Game criarjogo(GameSessionRI gameSessionRI, String token) throws RemoteException {
+    private static Game startGame(GameSessionRI gameSessionRI, String token) throws RemoteException {
         Scanner difficulty = new Scanner(System.in);
         System.out.println("Introduza a dificuldade:");
+
         int dif = difficulty.nextInt();
         System.out.println("Introduza o número máximo de jogadores:");
         int max = difficulty.nextInt();
 
-        //chama o Create Game
         PlayerRI playerRI = new PlayerImpl(1);
         Game game = gameSessionRI.createGame(1, dif, max, playerRI, token);
         playerRI.setFroggerGameRI(game.getFroggerGameRI());
@@ -128,25 +126,6 @@ public class GameClient implements Serializable {
         System.out.println("Jogo criado com sucesso!");
 
         return game;
-    }
-
-    /*private static void escolherjogo(GameSessionRI gameSessionRI) throws RemoteException {
-        System.out.println("Lista dos jogos disponíveis:");
-        assert gameSessionRI != null;
-        gameSessionRI.listGame();
-        Scanner escolherJogo = new Scanner(System.in);
-        System.out.println("Escolha um jogo para se juntar:");
-        int jogo = escolherJogo.nextInt();
-        PlayerRI playerRI = new PlayerImpl(1);
-        Game game = gameSessionRI.chooseGame(jogo, playerRI);
-        playerRI.setFroggerGameRI(game.getFroggerGameRI());
-
-        Main f = new Main(game, playerRI);
-        f.run();
-    }*/
-
-    private void print(String s) {
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, s);
     }
 
     private void menu() throws RemoteException {
@@ -204,7 +183,7 @@ public class GameClient implements Serializable {
                     menu();
                 } else {
                     PlayerRI observerRI = new PlayerImpl(1);
-                    Game game = criarjogo(gameSessionRI, token);
+                    Game game = startGame(gameSessionRI, token);
                     menu();
                 }
                 break;
@@ -246,14 +225,12 @@ public class GameClient implements Serializable {
                         Main f = new Main(jogo1, playerRI);
                         f.run();
                     }
+                    break;
                 }
-                break;
             default:
                 System.out.print("\nOpção Inválida!");
                 break;
-            case 4:
-                System.out.print("\nAté Breve.");
-                menu.close();
+
         }
     }
 }

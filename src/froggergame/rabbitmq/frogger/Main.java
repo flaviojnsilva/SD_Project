@@ -23,11 +23,9 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame._rabbitmq.frogger;
+package froggergame.rabbitmq.frogger;
 
-import froggergame._rabbitmq.chatgui.Observer;
-import froggergame.client.PlayerRI;
-import froggergame.server.Game;
+import froggergame.rabbitmq.chatgui.Observer;
 import jig.engine.ImageResource;
 import jig.engine.PaintableCanvas;
 import jig.engine.PaintableCanvas.JIGSHAPE;
