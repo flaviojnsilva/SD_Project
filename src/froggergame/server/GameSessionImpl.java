@@ -15,6 +15,7 @@ public class GameSessionImpl implements GameSessionRI {
 
     private GameFactoryImpl gameFactoryImpl;
     private String stringToken;
+    private String email;
 
     @Override
     public void setStringToken(String stringToken) throws RemoteException {
@@ -26,7 +27,6 @@ public class GameSessionImpl implements GameSessionRI {
         this.email = email;
     }
 
-    private String email;
 
     public GameSessionImpl(GameFactoryImpl gameFactory, String email) throws RemoteException {
         super();

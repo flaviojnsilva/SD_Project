@@ -7,7 +7,6 @@ import java.rmi.server.UnicastRemoteObject;
 public class PlayerImpl extends UnicastRemoteObject implements PlayerRI {
 
     private int id;
-    private FroggerGameRI gameGroupRI;
 
     public PlayerImpl(int id) throws RemoteException {
         super();
@@ -15,7 +14,7 @@ public class PlayerImpl extends UnicastRemoteObject implements PlayerRI {
     }
 
     @Override
-    public void setFroggerGameRI(FroggerGameRI gameGroup) throws RemoteException {
+    public void setFroggerGameRI(FroggerGameRI froggerGameRI) throws RemoteException {
     }
 
     @Override

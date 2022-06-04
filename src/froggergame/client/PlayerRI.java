@@ -6,5 +6,5 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface PlayerRI extends Remote {
-    void setFroggerGameRI(FroggerGameRI gameGroup) throws RemoteException;
+    void setFroggerGameRI(FroggerGameRI froggerGameRI) throws RemoteException;
 }

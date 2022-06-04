@@ -17,9 +17,9 @@ import java.util.ArrayList;
  */
 
 public interface GameSessionRI extends Remote {
-    public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI, String token) throws RemoteException;
+     Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI, String token) throws RemoteException;
 
-    public ArrayList<Game> listGame() throws RemoteException;
+     ArrayList<Game> listGame() throws RemoteException;
 
     void setEmail(String email) throws RemoteException;
 

@@ -1,7 +1,5 @@
 package froggergame.server;
 
-import froggergame.client.PlayerRI;
-
 import java.io.Serializable;
 
 public class Game implements Serializable {
