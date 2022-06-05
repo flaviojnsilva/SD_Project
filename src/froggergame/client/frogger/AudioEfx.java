@@ -23,16 +23,16 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
-
-import java.util.List;
-import java.util.Random;
-import java.util.LinkedList;
+package froggergame.client.frogger;
 
 import jig.engine.ResourceFactory;
 import jig.engine.audio.AudioState;
 import jig.engine.audio.jsound.AudioClip;
 import jig.engine.audio.jsound.AudioStream;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Controls the audio effects

@@ -3,21 +3,24 @@ package froggergame.client;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
-import froggergame.frogger.Main;
+import froggergame.client.frogger.Main;
 import froggergame.server.Game;
+import froggergame.server.GameFactoryImpl;
 import froggergame.server.GameFactoryRI;
 import froggergame.server.GameSessionRI;
 import froggergame.util.rmisetup.SetupContextRMI;
 
-import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
-import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.lang.System.exit;
 
 /**
  * <p>
@@ -32,10 +35,10 @@ import java.util.logging.Logger;
  * @author Rui S. Moreira
  * @version 3.0
  */
-public class GameClient implements Serializable {
+public class GameClient {
 
     /**
-     * Context for connecting a RMI froggergame.rmi.client MAIL_TO_ADDR a RMI Servant
+     * Context for connecting a RMI client MAIL_TO_ADDR a RMI Servant
      */
     private SetupContextRMI contextRMI;
     /**
@@ -43,12 +46,16 @@ public class GameClient implements Serializable {
      */
     private GameFactoryRI gameFactoryRI;
 
+    private GameFactoryImpl gameFactory;
+
+    private PlayerRI playerRI;
+
     public static void main(String[] args) {
         if (args != null && args.length < 2) {
-            System.err.println("usage: java [options] edu.ufp.sd.inf.rmi._01_helloworld.froggergame.rmi.server.HelloWorldClient <rmi_registry_ip> <rmi_registry_port> <service_name>");
+            System.err.println("usage: java [options] edu.ufp.sd.inf.rmi._01_helloworld.server.HelloWorldClient <rmi_registry_ip> <rmi_registry_port> <service_name>");
             System.exit(-1);
         } else {
-            //1. ============ Setup froggergame.rmi.client RMI context ============
+            //1. ============ Setup client RMI context ============
             GameClient hwc = new GameClient(args);
             //2. ============ Lookup service ============
             hwc.lookupService();
@@ -56,6 +63,19 @@ public class GameClient implements Serializable {
             hwc.playService();
         }
     }
+
+    public static void startMenu(String[] options) {
+        for (String option : options) {
+            System.out.println(option);
+        }
+        System.out.print("##--Frogger Game--##\n\n");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private static String[] options = {"Opção: 1- Criar um jogo.",
+            "Opção: 2- Juntar-me a um jogo já criado.",
+            "Opção: 3- Sair",
+    };
 
     public GameClient(String args[]) {
         try {
@@ -80,6 +100,7 @@ public class GameClient implements Serializable {
                 //Get service url (including servicename)
                 String serviceUrl = contextRMI.getServicesUrl(0);
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR lookup service @ {0}", serviceUrl);
+
                 //============ Get proxy MAIL_TO_ADDR HelloWorld service ============
                 gameFactoryRI = (GameFactoryRI) registry.lookup(serviceUrl);
             } else {
@@ -93,144 +114,166 @@ public class GameClient implements Serializable {
     }
 
     private void playService() {
+
         try {
-            menu();
-        } catch (RemoteException ex) {
+            //============ Call HelloWorld remote service ============
+            System.out.println("Primeiro registe-se por favor\n");
+
+            Scanner email = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("Introduza o nome:");
+            String eMail = email.nextLine();  // Read user input
+            Scanner password = new Scanner(System.in);  // Create a Scanner object
+            System.out.println("Introduza a password:");
+            String passWord = password.nextLine();  // Read user input
+            System.out.println(eMail + passWord);
+
+            boolean r = this.gameFactoryRI.register(eMail, passWord);
+            checkRegister(r);
+
+            GameSessionRI gameSessionRI = this.gameFactoryRI.login(eMail, passWord);
+
+            String token = "";
+            try {
+                Algorithm algorithm = Algorithm.HMAC256("secret");
+                token = JWT.create()
+                        .withIssuer(eMail)
+                        .sign(algorithm);
+
+            } catch (JWTCreationException exception) {
+                //Invalid Signing configuration / Couldn't convert Claims.
+            }
+
+            System.out.println(token);
+
+            gameSessionRI.setEmail(eMail);
+            gameSessionRI.setToken(token);
+
+
+            int option = 1;
+            while (option != 4) {
+                startMenu(options);
+                option = email.nextInt();
+                switch (option) {
+                    case 1: {
+                        System.out.print("\nFaça Login\n");
+                        Scanner username2 = new Scanner(System.in);  // Create a Scanner object
+                        System.out.println("Introduza o nome:");
+                        String userName2 = username2.nextLine();  // Read user input
+                        Scanner password2 = new Scanner(System.in);  // Create a Scanner object
+                        System.out.println("Introduza a password:");
+                        String passWord2 = password2.nextLine();  // Read user input
+                        GameSessionRI gameSessionRI2 = this.gameFactoryRI.login(userName2, passWord2);
+
+                        if (gameSessionRI2 == null) {
+
+                            System.out.println("Login errado.\n");
+                            playService();
+                        } else {
+                            assert gameSessionRI2 != null;
+                            createGame(gameSessionRI, token);
+                        }
+                    }
+                    case 2: {
+                        System.out.print("\nFaça Login\n");
+                        Scanner username2 = new Scanner(System.in);  // Create a Scanner object
+                        System.out.println("Introduza o nome:");
+                        String userName2 = username2.nextLine();  // Read user input
+                        Scanner password2 = new Scanner(System.in);  // Create a Scanner object
+                        System.out.println("Introduza a password:");
+                        String passWord2 = password2.nextLine();  // Read user input
+                        GameSessionRI gameSessionRI3 = this.gameFactoryRI.login(userName2, passWord2);
+
+                        if (gameSessionRI3 == null) {
+
+                            System.out.println("Login errado.\n");
+                            playService();
+                        } else {
+                            assert gameSessionRI3 != null;
+                            selectGame(gameSessionRI, token);
+                        }
+                    }
+                    case 3:
+                        exit(0);
+                }
+            }
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR finish, bye. ;)");
+        } catch (Exception ex) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void checkRegister(boolean b) {
-        if (b) {
-            //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User Registered");
-            System.out.println("UTILIZADOR REGISTADO.\n");
+    /**
+     * Verificação do registo do user
+     *
+     * @param r
+     */
+    private void checkRegister(boolean r) {
+        if (r) {
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User registado com sucesso!");
         } else {
-            //Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User not Registered");
-            System.out.println("UTILIZADOR NÃO REGISTADO.\n");
+            Logger.getLogger(this.getClass().getName()).log(Level.INFO, "User já existe! Escolha outro nome para o registo.");
         }
     }
 
-    private static Game startGame(GameSessionRI gameSessionRI, String token) throws RemoteException {
+    /**
+     * Criar um jogo
+     *
+     * @param gameSessionRI
+     * @param token
+     * @return
+     * @throws RemoteException
+     */
+    private static Game createGame(GameSessionRI gameSessionRI, String token) throws RemoteException {
         Scanner difficulty = new Scanner(System.in);
         System.out.println("Introduza a dificuldade:");
-
         int dif = difficulty.nextInt();
-        System.out.println("Introduza o número máximo de jogadores:");
+        System.out.println("Introduza o numero maximo de jogadores:");
         int max = difficulty.nextInt();
 
-        PlayerRI playerRI = new PlayerImpl(1);
-        Game game = gameSessionRI.createGame(1, dif, max, playerRI, token);
-        playerRI.setFroggerGameRI(game.getFroggerGameRI());
-        Main f = new Main(game, playerRI);
+        //chama o Create Game
+        PlayerRI PlayerRI = new PlayerImpl(0);
+
+        Game game = gameSessionRI.createGame(1, dif, max, PlayerRI, token);
+        PlayerRI.setFroggerGameRI(game.getFroggerRI());
+
+        while (PlayerRI.getFroggerGameRI().getFroggers().size() != game.getMaxPlayers()) {
+        }
+
+        Main f = new Main(game, PlayerRI);
         f.run();
+
         System.out.println("Jogo criado com sucesso!");
 
         return game;
     }
 
-    private void menu() throws RemoteException {
-        Scanner menu = new Scanner(System.in);
-        System.out.print("##--Frogger Game--##\n\n");
-        System.out.print("|----------------------------|\n");
-        System.out.print("| Opção 1 - Registar-me      |\n");
-        System.out.print("| Opção 2 - Novo Jogo        |\n");
-        System.out.print("| Opção 3 - Juntar-me a Jogo |\n");
-        System.out.print("| Opção 4 - Sair             |\n");
-        System.out.print("|----------------------------|\n");
-        System.out.print("Digite uma opção: ");
-
-        int option = menu.nextInt();
-
-        switch (option) {
-            case 1:
-                System.out.print("\nRegisto\n");
-                Scanner email = new Scanner(System.in);  // Create a Scanner object
-                System.out.println("Introduza o nome:");
-                String eMail = email.nextLine();  // Read user input
-                Scanner password = new Scanner(System.in);  // Create a Scanner object
-                System.out.println("Introduza a password:");
-                String passWord = password.nextLine();  // Read user input
-                boolean r = this.gameFactoryRI.register(eMail, passWord);
-                menu();
-                break;
-            case 2:
-                System.out.print("\nNovo Jogo");
-                System.out.print("\nFaça Login\n");
-                Scanner username2 = new Scanner(System.in);  // Create a Scanner object
-                System.out.println("Introduza o nome:");
-                String userName2 = username2.nextLine();  // Read user input
-                Scanner password2 = new Scanner(System.in);  // Create a Scanner object
-                System.out.println("Introduza a password:");
-                String passWord2 = password2.nextLine();  // Read user input
-                GameSessionRI gameSessionRI = this.gameFactoryRI.login(userName2, passWord2);
-
-                String token = "";
-
-                try {
-                    Algorithm algorithm = Algorithm.HMAC256("secret");
-                    token = JWT.create()
-                            .withIssuer(userName2)
-                            .sign(algorithm);
-                } catch (JWTCreationException exception) {
-                    //Invalid Signing configuration / Couldn't convert Claims.
-                }
-
-                gameSessionRI.setStringToken(token);
-                gameSessionRI.setEmail(userName2);
-
-                if (gameSessionRI == null) {
-                    System.out.println("Nao está registado\n Efetue primeiro o registo");
-                    menu();
-                } else {
-                    PlayerRI observerRI = new PlayerImpl(1);
-                    Game game = startGame(gameSessionRI, token);
-                    menu();
-                }
-                break;
-            case 3:
-                System.out.print("\nJuntar-me a Jogo\n");
-                System.out.print("\nFaça Login\n");
-                Scanner username3 = new Scanner(System.in);
-                System.out.println("Introduza o nome:");
-                String userName3 = username3.nextLine();
-                Scanner password3 = new Scanner(System.in);
-                System.out.println("Introduza a password:");
-                String passWord3 = password3.nextLine();
-                GameSessionRI gameSessionRI2 = this.gameFactoryRI.login(userName3, passWord3);
-                if (gameSessionRI2 == null) {
-                    System.out.println("Não está registado\nEfetue primeiro o registo");
-                    menu();
-                } else {
-                    if (gameSessionRI2.listGame() == null) {
-                        System.out.println("Não existem jogos disponiveis.\nCrie um novo jogo\n");
-                        menu();
-                    } else {
-
-                        ArrayList<Game> games = gameSessionRI2.listGame();
-                        for (Game jogos : games
-                        ) {
-                            System.out.println(jogos.getId());
-                        }
-
-                        Scanner choosedGame = new Scanner(System.in);
-
-                        int game = choosedGame.nextInt();
-
-                        PlayerRI playerRI = new PlayerImpl(1);
-
-                        Game jogo1 = gameSessionRI2.chooseGame(game, playerRI);
-
-                        playerRI.setFroggerGameRI(jogo1.getFroggerGameRI());
-
-                        Main f = new Main(jogo1, playerRI);
-                        f.run();
-                    }
-                    break;
-                }
-            default:
-                System.out.print("\nOpção Inválida!");
-                break;
-
+    /**
+     * Escolha de um jogo para se juntar
+     *
+     * @param gameSessionRI
+     * @param token
+     * @throws RemoteException
+     */
+    private static void selectGame(GameSessionRI gameSessionRI, String token) throws RemoteException {
+        System.out.println("Lista dos jogos disponiveis:");
+        assert gameSessionRI != null;
+        ArrayList<Game> games = gameSessionRI.listFroggerGames();
+        for (Game game : games) {
+            System.out.println(game.getId());
         }
+
+        Scanner selectGame = new Scanner(System.in);
+        System.out.println("Escolha um jogo para se juntar:");
+        int jogo = selectGame.nextInt();
+
+        PlayerRI PlayerRI = new PlayerImpl(1);
+
+        Game game = gameSessionRI.chooseGame(jogo, PlayerRI, token);
+        PlayerRI.setFroggerGameRI(game.getFroggerRI());
+
+        while (PlayerRI.getFroggerGameRI().getFroggers().size() != game.getMaxPlayers()) {
+        }
+        Main f = new Main(game, PlayerRI);
+        f.run();
     }
 }

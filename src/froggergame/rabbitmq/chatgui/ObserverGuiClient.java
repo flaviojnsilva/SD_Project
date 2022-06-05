@@ -15,7 +15,7 @@ package froggergame.rabbitmq.chatgui;
 
 import com.rabbitmq.client.BuiltinExchangeType;
 import froggergame.rabbitmq.frogger.Main;
-import froggergame.util.RabbitUtils;
+import froggergame.rabbitmq.util.RabbitUtils;
 
 import javax.swing.*;
 import java.io.IOException;

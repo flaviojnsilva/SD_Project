@@ -1,8 +1,7 @@
 package froggergame.rabbitmq.chatgui;
 
-import com.rabbitmq.client.AMQP.BasicProperties;
 import com.rabbitmq.client.*;
-import froggergame.util.RabbitUtils;
+import froggergame.rabbitmq.util.RabbitUtils;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -29,7 +28,7 @@ public class Observer {
 
     public Observer(ObserverGuiClient gui, String host, int port, String user, String pass, String exchangeName, BuiltinExchangeType exchangeType, String messageFormat) throws IOException, TimeoutException {
         this.gui = gui;
-        Logger.getLogger(this.getClass().getName()).log(Level.INFO, " going to attach observer to host: " + host + "...");
+        Logger.getLogger(this.getClass().getName()).log(Level.INFO, " going to add observer to host: " + host + "...");
 
         Connection connection = RabbitUtils.newConnection2Server(host, port, user, pass);
         this.channelToRabbitMq = RabbitUtils.createChannel2Server(connection);
@@ -39,7 +38,7 @@ public class Observer {
         this.messageFormat = messageFormat;
 
         bindExchangeToChannelRabbitMQ();
-        attachConsumerToChannelExchangeWithKey();
+        addConsumerToChannelExchangeWithKey();
     }
 
     /**
@@ -54,7 +53,7 @@ public class Observer {
     /**
      * Creates a Consumer associated with an unnamed queue.
      */
-    public void attachConsumerToChannelExchangeWithKey() {
+    public void addConsumerToChannelExchangeWithKey() {
         try {
             String queueName = channelToRabbitMq.queueDeclare().getQueue();
 

@@ -23,11 +23,11 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
-
-import java.util.Random;
+package froggergame.client.frogger;
 
 import jig.engine.util.Vector2D;
+
+import java.util.Random;
 /**
  * Generating the Wind effect in Frogger
  * 

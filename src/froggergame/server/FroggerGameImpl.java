@@ -1,35 +1,59 @@
 package froggergame.server;
 
 import froggergame.client.PlayerRI;
+
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-public class FroggerGameImpl implements FroggerGameRI {
+public class FroggerGameImpl extends UnicastRemoteObject implements FroggerGameRI {
     private int id;
-    private ArrayList<PlayerRI> players = new ArrayList<>();
+    private State froggerGameState;
+    private ArrayList<PlayerRI> froggers = new ArrayList<>();
+    protected FroggerGameImpl() throws RemoteException {
+        this.froggerGameState = new State(null, null);
+    }
 
     /**
-     * Adiciona um player ao jogo
+     * Metodo para fazer add de um frogger
      *
-     * @param player a adicionar
+     * @param frogger
+     * @throws RemoteException
      */
-    //attach
     @Override
-    public void addPlayer(PlayerRI player) {
-        if (!this.players.contains(player)) {
-            this.players.add(player);
+    public void add(PlayerRI frogger) throws RemoteException {
+        this.froggers.add(frogger);
+    }
+    /**
+     * Notifica os Observers
+     *
+     * @param state
+     * @throws RemoteException
+     */
+    @Override
+    public void notifyObserver(State state) throws RemoteException {
+        for (PlayerRI PlayerRI : froggers) {
+            PlayerRI.updateGameState(state);
         }
     }
 
     @Override
-    public String toString() {
-        return "Game{" +
-                "id= " + id +
-                '}';
+    public int getFrogger() throws RemoteException {
+        return froggers.size() + 1;
     }
 
-    public ArrayList<PlayerRI> getPlayers() {
-        return players;
+    @Override
+    public int getId() throws RemoteException {
+        return id;
+    }
+    @Override
+    public void setFroggerGameState(State froggerGameState) throws RemoteException {
+        this.froggerGameState = froggerGameState;
+        notifyObserver(froggerGameState);
     }
 
+    @Override
+    public ArrayList<PlayerRI> getFroggers() throws RemoteException {
+        return froggers;
+    }
 }
-

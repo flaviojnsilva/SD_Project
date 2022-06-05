@@ -23,11 +23,11 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
-
-import java.util.Random;
+package froggergame.client.frogger;
 
 import jig.engine.util.Vector2D;
+
+import java.util.Random;
 
 public class HeatWave {
 	final static int PERIOD    = 2000;  //milliseconds
@@ -53,7 +53,7 @@ public class HeatWave {
 	 * @param f - reference Frogger's hw_hasMoved
 	 * @param deltaMs
 	 */
-	public void perform (Frogger f, final long deltaMs, final int level) {	
+	public void perform (Frogger f, final long deltaMs, final int level) {
 		if (!f.isAlive) {
 			isHot = false;
 			return;
@@ -72,7 +72,6 @@ public class HeatWave {
 	 * Initiate the Heat Wave effect
 	 * 
 	 * @param f
-	 * @param temp - based on the GameTemp, this effects occurs more often
 	 */
 	public void start (Frogger f, final int GameLevel) {
 		
@@ -90,7 +89,6 @@ public class HeatWave {
 	/**
 	 * Generating particles
 	 * 
-	 * @param f
 	 * @return
 	 */
 	public MovingEntity genParticles(Vector2D pos) {

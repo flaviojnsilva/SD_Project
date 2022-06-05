@@ -23,7 +23,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
+package froggergame.client.frogger;
 import jig.engine.util.Vector2D;
   
 /**

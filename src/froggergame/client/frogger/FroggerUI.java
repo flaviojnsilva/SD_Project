@@ -23,18 +23,14 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
+package froggergame.client.frogger;
 
-import java.awt.Color;
-import java.awt.Font;
+import jig.engine.*;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.rmi.RemoteException;
 import java.util.List;
-
-import jig.engine.FontResource;
-import jig.engine.ImageResource;
-import jig.engine.RenderingContext;
-import jig.engine.ResourceFactory;
-import jig.engine.ViewableLayer;
 
 public class FroggerUI implements ViewableLayer {
 	List<ImageResource> heart = ResourceFactory.getFactory().getFrames(
@@ -77,7 +73,14 @@ public class FroggerUI implements ViewableLayer {
 			if (maxHearts > 10)
 				maxHearts = 10;
 			else 
-				maxHearts = game.GameLives;
+				//maxHearts = game.GameLives;
+			{
+				try {
+					maxHearts = game.getFrogs().get(game.getPlayerRI().getId()).froggerLives;
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
 			
 			for (int i = 0; i < maxHearts; i++ ) {
 				heart.get(0).render(rc, 

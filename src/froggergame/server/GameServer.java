@@ -3,22 +3,9 @@ package froggergame.server;
 import froggergame.util.rmisetup.SetupContextRMI;
 import java.rmi.RemoteException;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-/**
- * <p>
- * Title: Projecto SD</p>
- * <p>
- * Description: Projecto apoio aulas SD</p>
- * <p>
- * Copyright: Copyright (c) 2017</p>
- * <p>
- * Company: UFP </p>
- *
- * @author Rui S. Moreira
- * @version 3.0
- */
 
 public class GameServer {
 
@@ -29,11 +16,13 @@ public class GameServer {
     /**
      * Remote interface that will hold reference MAIL_TO_ADDR the Servant impl
      */
-    private GameFactoryRI sessionFactoryRI;
+    private GameFactoryRI gameFactoryRI;
+
+    private static ArrayList<FroggerGameImpl> froggerGameArrayList = new ArrayList<>();
 
     public static void main(String[] args) {
         if (args != null && args.length < 3) {
-            System.err.println("usage: java [options] edu.ufp.sd._01_helloworld.froggergame.rmi.server.HelloWorldServer <rmi_registry_ip> <rmi_registry_port> <service_name>");
+            System.err.println("usage: java [options] edu.ufp.sd._01_helloworld.server.HelloWorldServer <rmi_registry_ip> <rmi_registry_port> <service_name>");
             System.exit(-1);
         } else {
             //1. ============ Create Servant ============
@@ -41,13 +30,6 @@ public class GameServer {
             //2. ============ Rebind servant on rmiregistry ============
             hws.rebindService();
         }
-        /*
-        try {
-            loadProperties();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        */
     }
 
     /**
@@ -74,14 +56,15 @@ public class GameServer {
             //Bind service on rmiregistry and wait for calls
             if (registry != null) {
                 //============ Create Servant ============
-                sessionFactoryRI = new GameFactoryImpl();
+                gameFactoryRI = new GameFactoryImpl();
 
                 //Get service url (including servicename)
                 String serviceUrl = contextRMI.getServicesUrl(0);
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "going MAIL_TO_ADDR rebind service @ {0}", serviceUrl);
 
                 //============ Rebind servant ============
-                registry.rebind(serviceUrl, sessionFactoryRI);
+                //Naming.bind(serviceUrl, helloWorldRI);
+                registry.rebind(serviceUrl, gameFactoryRI);
                 Logger.getLogger(this.getClass().getName()).log(Level.INFO, "service bound and running. :)");
             } else {
                 //System.out.println("HelloWorldServer - Constructor(): create registry on port 1099");

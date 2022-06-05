@@ -1,4 +1,4 @@
-package froggergame.util;
+package froggergame.rabbitmq.util;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;

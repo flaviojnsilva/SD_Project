@@ -23,11 +23,13 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
-import java.util.List;
+package froggergame.client.frogger;
 
 import jig.engine.physics.AbstractBodyLayer;
 import jig.engine.util.Vector2D;
+
+import java.rmi.RemoteException;
+import java.util.List;
 
 public class FroggerCollisionDetection  {
 
@@ -45,7 +47,7 @@ public class FroggerCollisionDetection  {
 		frogSphere = frog.getCollisionObjects().get(0);
 	}
 	
-	public void testCollision(AbstractBodyLayer<MovingEntity> l) {
+	public void testCollision(AbstractBodyLayer<MovingEntity> l) throws RemoteException {
 
 		if (!frog.isAlive)
 			return;
@@ -55,7 +57,7 @@ public class FroggerCollisionDetection  {
 		
 		if (isOutOfBounds()) {
 			frog.die();
-			return;
+		return;
 		}
 		
 		for (MovingEntity i : l) {
@@ -122,7 +124,7 @@ public class FroggerCollisionDetection  {
 		return false;
 	}
 	
-	public void collide(MovingEntity m, CollisionObject s) {
+	public void collide(MovingEntity m, CollisionObject s) throws RemoteException {
 
 		if (m instanceof Truck || m instanceof Car || m instanceof CopCar) {
 			frog.die();

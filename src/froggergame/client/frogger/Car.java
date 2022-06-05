@@ -23,34 +23,22 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
-import jig.engine.physics.vpe.VanillaSphere;
+package froggergame.client.frogger;
+
 import jig.engine.util.Vector2D;
-
-
-public class CollisionObject extends VanillaSphere {
-
-	public CollisionObject(Vector2D pos) {
-		super("col");
-		setPosition(pos);
-	}
+ 
+public class Car extends MovingEntity {
+	public final static int TYPES  = 3;
+	public final static int LENGTH = 32*1;
 	
-	public CollisionObject(String name, Vector2D pos) {
-		super(name);
-		setPosition(pos);
-	}
-	
-	/**
-	 * Depending on the collision sphere, we offset it's position so
-	 * that it appears in the middle of the object
-	 */
-	public void setPosition(Vector2D pos) {
-		double dX = 16 - getRadius();
-		double dY = -getRadius() +16;
-		position = new Vector2D(pos.getX()+dX, pos.getY()+dY);
-	}
-	
-	public void update(long deltaMs) {
-		;
+	public Car (Vector2D pos, Vector2D v, int randId) {
+		super(Main.SPRITE_SHEET + "#car" + randId);
+		position = pos;
+		collisionObjects.add(new CollisionObject(position));
+		velocity = v;
+		if (v.getX() < 0)
+			setFrame(1);
+		else
+			setFrame(0);
 	}
 }

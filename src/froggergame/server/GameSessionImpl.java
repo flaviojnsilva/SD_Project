@@ -11,81 +11,110 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 
-public class GameSessionImpl implements GameSessionRI {
-
-    private GameFactoryImpl gameFactoryImpl;
-    private String stringToken;
+public class GameSessionImpl extends UnicastRemoteObject implements GameSessionRI {
+    GameFactoryImpl gameFactoryImpl;
     private String email;
+    String token;
 
-    @Override
-    public void setStringToken(String stringToken) throws RemoteException {
-        this.stringToken = stringToken;
-    }
-
-    @Override
-    public void setEmail(String email) throws RemoteException {
-        this.email = email;
-    }
-
-
-    public GameSessionImpl(GameFactoryImpl gameFactory, String email) throws RemoteException {
+    protected GameSessionImpl(GameFactoryImpl gameFactory) throws RemoteException {
         super();
         this.gameFactoryImpl = gameFactory;
-        this.email = email;
-        UnicastRemoteObject.exportObject(this, 0);
+
     }
 
-    //create game
+    /**
+     * Criar um jogo
+     *
+     * @param id
+     * @param difficulty
+     * @param maxPlayers
+     * @param PlayerRI
+     * @param token
+     * @return
+     * @throws RemoteException
+     */
     @Override
-    public Game createGame(int id, int diff, int maxPlayers, PlayerRI playerRI, String token) throws RemoteException {
+    public Game createGame(int id, int difficulty, int maxPlayers, PlayerRI PlayerRI, String token) throws RemoteException {
 
-        DecodedJWT decodedJWT = null;
-
+        DecodedJWT jwt = null;
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret"); //use more secure key
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer(email)
                     .build(); //Reusable verifier instance
-            decodedJWT = verifier.verify(token);
-            System.out.println(decodedJWT.getToken());
+            jwt = verifier.verify(token);
+            System.out.println(jwt.getToken());
         } catch (JWTVerificationException exception) {
             //Invalid signature/claims
         }
 
-        assert decodedJWT != null;
-        if (decodedJWT.getToken().equals(token)) {
+        assert jwt != null;
+        if (jwt.getToken().equals(token)) {
 
             FroggerGameRI froggerGameRI = new FroggerGameImpl();
+            Game game = gameFactoryImpl.dbMockup.insert(difficulty, maxPlayers, froggerGameRI);
 
-            Game game = gameFactoryImpl.getDbMockup().insert(id, diff, maxPlayers, froggerGameRI);
-            game.getFroggerGameRI().addPlayer(playerRI);
+            game.getFroggerRI().add(PlayerRI);
 
+            System.out.println("Jogo criado com sucesso!");
             return game;
+        } else {
+            System.out.println("Token errado!");
+            return null;
         }
-        return null;
     }
 
-    public Game chooseGame(int jogo, PlayerRI playerRI) throws RemoteException {
+    /**
+     * Escolher jogo a juntar-se
+     *
+     * @param idG
+     * @param PlayerRI
+     * @param token
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public Game chooseGame(int idG, PlayerRI PlayerRI, String token) throws RemoteException {
 
-        Game game = gameFactoryImpl.getDbMockup().select(jogo);
+        DecodedJWT jwt = null;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("secret"); //use more secure key
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer(email)
+                    .build(); //Reusable verifier instance
+            jwt = verifier.verify(token);
+            System.out.println(jwt.getToken());
+        } catch (JWTVerificationException exception) {
+        }
 
-        this.join(jogo, playerRI);
-        return game;
+        assert jwt != null;
+        if (jwt.getToken().equals(token)) {
+            Game game = gameFactoryImpl.dbMockup.select(idG);
+            game.getFroggerRI().add(PlayerRI);
+            return game;
+        } else {
+            System.out.println("Token errado!");
+            return null;
+        }
     }
 
-
-    public Game join(int id, PlayerRI playerRI) throws RemoteException {
-
-        Game game = gameFactoryImpl.getDbMockup().select(id);
-        game.getFroggerGameRI().addPlayer(playerRI);
-
-        return game;
+    /**
+     *listar os jogos
+     *
+     * @return
+     * @throws RemoteException
+     */
+    @Override
+    public ArrayList<Game> listFroggerGames() throws RemoteException {
+        return this.gameFactoryImpl.dbMockup.printGames();
     }
 
     @Override
-    public ArrayList<Game> listGame() throws RemoteException {
-
-        return this.gameFactoryImpl.getDbMockup().printGames();
+    public void setToken(String token) throws RemoteException {
+        this.token = token;
     }
 
+    public void setEmail(String email) throws RemoteException {
+        this.email = email;
+    }
 }

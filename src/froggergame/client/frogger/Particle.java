@@ -23,46 +23,54 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package froggergame.frogger;
+package froggergame.client.frogger;
+
 import jig.engine.util.Vector2D;
 
-public class Goal extends MovingEntity {
+/**
+ * Simple tiny particle
+ * 
+ * Used to show some weather effects
+ * 
+ * @author vitaliy
+ *
+ */
+public class Particle extends MovingEntity {
 	
-	public boolean isReached = false;
-	public boolean isBonus = false;
+	private int timeExpire = 1;
+	private int timeAlive = 1;
 	
-	public Goal(int loc) {
-		super(Main.SPRITE_SHEET + "#goal");
-		position = new Vector2D(32*(1+2*loc), 32);
-		collisionObjects.add(new CollisionObject("colSmall", position));
-		sync(position);
-		setFrame(0);
-	}
-
-	public Goal(Vector2D pos) {
-		super(Main.SPRITE_SHEET + "#goal");
+	public Particle(String sprite, Vector2D pos, Vector2D v) {
+		super(sprite);
 		position = pos;
-		collisionObjects.add(new CollisionObject("colSmall", position));
-		sync(position);
-		setFrame(0);		
+		velocity = v;
+		setActivation(true);
+		timeExpire = 0;
 	}
 	
-	public void reached() {
-		isReached = true;
-		setFrame(1);
+	/**
+	 * Build particle with expiration timer
+	 * 
+	 * @param pos - position
+	 * @param v - velocity
+	 * @param te - expiration timer in milliseconds
+	 */
+	public Particle(String sprite, Vector2D pos, Vector2D v, int te) {
+		super(sprite);
+		position = pos;
+		velocity = v;
+		setActivation(true);
+		timeExpire = te;
 	}
 	
-	public void setBonus(boolean b) {
-		if (b) {
-			isBonus = true;
-			setFrame(2);
-		} else {
-			isBonus = false;
-			setFrame(0);
+	public void update(final long deltaMs) {
+		super.update(deltaMs);
+		
+		// Check the expiration
+		if (timeExpire != 0) {
+			timeAlive += deltaMs;
+			if (timeAlive > timeExpire)
+				setActivation(false);
 		}
-	}
-	
-	public void update(long deltaMs) {
-		;
 	}
 }

@@ -1,51 +1,54 @@
 package froggergame.server;
 
-import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 
-/**
- * <p>Title: Projecto SD</p>
- * <p>Description: Projecto apoio aulas SD</p>
- * <p>Copyright: Copyright (c) 2017</p>
- * <p>Company: UFP </p>
- *
- * @author Rui S. Moreira
- * @version 3.0
- */
-
 public class GameFactoryImpl extends UnicastRemoteObject implements GameFactoryRI {
-    private DBMockup dbMockup;
-    private HashMap<String, GameSessionImpl> match_userSession;
+
+    public DBMockup dbMockup;
+    public HashMap<String, GameSessionImpl> user_session;
 
     public GameFactoryImpl() throws RemoteException {
         super();
         this.dbMockup = new DBMockup();
-        this.match_userSession = new HashMap<>();
+        this.user_session = new HashMap<>();
     }
 
-    @Override
-    public GameSessionRI login(String email, String password) throws RemoteException {
-        if (this.dbMockup.exists(email, password)) {
-            if (match_userSession.containsKey(email)) {
-                return match_userSession.get(email);
-            } else {
-                GameSessionImpl gameSession = new GameSessionImpl(this, email);
-                match_userSession.put(email, gameSession);
-                return gameSession;
+    /**
+     * Metodo Login do utilizador
+     * @param username
+     * @param pwd
+     * @return
+     * @throws RemoteException
+     */
+    public GameSessionRI login(String username, String pwd) throws RemoteException {
+        if (this.dbMockup.exists(username,pwd)){
+            if (user_session.containsKey(username)){
+                System.out.println("Login com sucesso.");
+                return user_session.get(username);
             }
-        } else {
-            System.out.println("TESTE USER ERRADOS");
+            else{
+                GameSessionImpl gameSessionImpl = new GameSessionImpl(this) ;
+                user_session.put(username, gameSessionImpl);
+                System.out.println("Sessao criada com sucesso.");
+                return gameSessionImpl;
+            }
+        }
+        else {
+            System.out.println("Erro ao efetuar o Login! Dados errados.");
             return null;
         }
     }
-
+    /**
+     * Regista user na DBMockUp
+     * @param username username a registar
+     * @param pwd password a registar
+     * @return true - Registado | false - Nao registado
+     * @throws RemoteException
+     */
     @Override
-    public boolean register(String email, String password) throws RemoteException {
-        return this.dbMockup.register(email, password);
-    }
-
-    public DBMockup getDbMockup() {
-        return dbMockup;
+    public boolean register(String username, String pwd) throws RemoteException {
+        return this.dbMockup.register(username, pwd);
     }
 }
